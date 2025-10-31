@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import * as L from 'leaflet';
+import { GeoJsonObject } from 'geojson';
 
 @Component({
   selector: 'app-map-component',
@@ -10,7 +11,7 @@ import * as L from 'leaflet';
 export class MapComponent {
   private map: L.Map | undefined;
   
-  ngAfterViewinit() {
+  ngAfterViewInit() {
     this.setupMap();
   }
   
