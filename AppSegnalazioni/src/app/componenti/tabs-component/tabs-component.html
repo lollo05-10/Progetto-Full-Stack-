@@ -1,36 +1,19 @@
-<mat-tab-group headerPosition="below" class="bottom-tabs">
-    <mat-tab>
-      <ng-template mat-tab-label>
-        <mat-icon class="app-tab-icon">thumb_up</mat-icon>
-        First
-      </ng-template>
-      Content 1
-    </mat-tab>
+<section>
   
-    <mat-tab>
-      <ng-template mat-tab-label>
-        <mat-icon class="app-tab-icon">thumb_up</mat-icon>
-        Second
-      </ng-template>
-      Content 2
-    </mat-tab>
-  
-    <mat-tab>
-      <ng-template mat-tab-label>
-        <mat-icon class="app-tab-icon">thumb_up</mat-icon>
-        Third
-      </ng-template>
-  
-      Content 3
-    </mat-tab>
-
-    <mat-tab>
-        <ng-template mat-tab-label>
-          <mat-icon class="app-tab-icon">thumb_up</mat-icon>
-          Fourth
-        </ng-template>
-    
-        Content 4
-      </mat-tab>
-  </mat-tab-group>
-  
+  <div class="example-button-row">
+    <div class="example-flex-container">
+      <button matFab extended routerLink="/feed">
+        <mat-icon>favorite</mat-icon>
+        Home
+      </button>
+      <button matFab extended routerLink="/detail">
+        <mat-icon>favorite</mat-icon>
+        Map
+      </button>
+      <a matFab extended routerLink="/user">
+        <mat-icon>favorite</mat-icon>
+        User
+      </a>
+    </div>
+  </div>
+</section>

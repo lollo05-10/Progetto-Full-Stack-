@@ -1,13 +1,52 @@
-.app-tab-icon {
-    margin-right: 8px;
-  }
+@use '@angular/material' as mat;
 
-  .bottom-tabs {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background: white;
-    z-index: 1000;
-  }
+.my-custom-buttons {
+  @include mat.button-overrides((
+    filled-container-color: #e91e63,          // colore normale
+    filled-label-text-color: white,           // testo normale
+    filled-state-layer-color: #8ABEB9,       // colore "overlay" su hover/focus/pressed
+    filled-pressed-state-layer-opacity: 1,   // mostra completamente l'overlay quando premuto
+    filled-hover-state-layer-opacity: 0.5,   // opzionale: hover parziale
+    filled-focus-state-layer-opacity: 0.3,   // opzionale: focus parziale
+  ));
+}
+
+
+
+
+section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #fff;
+  padding: 10px;
+  z-index: 1000;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.example-label {
+  font-size: 14px;
+  margin: 0 16px 0 8px;
+  min-width: 120px;
+}
+
+.example-button-row {
+  max-width: 600px;
+}
+
+.example-button-row .mat-mdc-button-base {
+  margin: 12px 12px 12px 0;
+}
+
+.example-flex-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px 16px; /* più spazio tra i bottoni */
+}
+
   
