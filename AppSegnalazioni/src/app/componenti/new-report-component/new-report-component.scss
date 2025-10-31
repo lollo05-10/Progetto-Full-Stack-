@@ -1,0 +1,15 @@
+.report-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.cat-container {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
