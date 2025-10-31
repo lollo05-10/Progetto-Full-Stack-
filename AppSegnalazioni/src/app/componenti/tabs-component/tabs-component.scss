@@ -1,14 +1,24 @@
 @use '@angular/material' as mat;
 
-.my-custom-buttons {
-  @include mat.button-overrides((
-    filled-container-color: #e91e63,          // colore normale
-    filled-label-text-color: white,           // testo normale
-    filled-state-layer-color: #8ABEB9,       // colore "overlay" su hover/focus/pressed
-    filled-pressed-state-layer-opacity: 1,   // mostra completamente l'overlay quando premuto
-    filled-hover-state-layer-opacity: 0.5,   // opzionale: hover parziale
-    filled-focus-state-layer-opacity: 0.3,   // opzionale: focus parziale
-  ));
+:host ::ng-deep {
+  .my-custom-buttons {
+    @include mat.fab-overrides((
+      container-color:#0046FF,         // colore di sfondo del FAB
+      foreground-color: white,          // colore di testo e icone
+      state-layer-color: #8ABEB9,       // overlay per hover/focus/pressed
+      pressed-state-layer-opacity: 1,   // intensità overlay quando premuto
+      hover-state-layer-opacity: 0.4,   // intensità overlay su hover
+      focus-state-layer-opacity: 0.2,   // intensità overlay su focus
+
+
+
+      container-elevation-shadow: none,
+      hover-container-elevation-shadow: none,
+      focus-container-elevation-shadow: none,
+      pressed-container-elevation-shadow: none,
+      extended-container-elevation-shadow: none
+    ));
+  }
 }
 
 
@@ -22,7 +32,7 @@ section {
   bottom: 0;
   left: 0;
   width: 100%;
-  background: #fff;
+  background: #0046FF;
   padding: 10px;
   z-index: 1000;
   padding-bottom: env(safe-area-inset-bottom);
