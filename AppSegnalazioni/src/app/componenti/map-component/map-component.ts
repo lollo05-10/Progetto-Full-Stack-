@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
 import * as L from 'leaflet';
 import { GeoJsonObject } from 'geojson';
+import { MatIconModule } from "@angular/material/icon";
+import { ButtonsComponent } from "../buttons-component/buttons-component";
 
 @Component({
   selector: 'app-map-component',
-  imports: [],
+  imports: [MatIconModule, ButtonsComponent],
   templateUrl: './map-component.html',
   styleUrl: './map-component.scss'
 })
