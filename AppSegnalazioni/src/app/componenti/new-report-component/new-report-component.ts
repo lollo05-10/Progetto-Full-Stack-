@@ -64,7 +64,7 @@ export class NewReportComponent {
       [Validators.required, Validators.minLength(5), Validators.maxLength(50)],
     ],
     categories: this.fb.array([this.fb.control('')]),
-    date: ['', [Validators.required]],
+    date: ['', [Validators.required, this.DateValidator()]],
   });
 
   get categories() {
@@ -80,34 +80,15 @@ export class NewReportComponent {
 
     this.categories.removeAt(index);
   }
-  //TODO: Validatore che servirà per controllare che la data inserita non sia nel futuro
-  /*DateValidator(): ValidatorFn {
+
+  DateValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       if (!control.value) return null;
       const today = Date.now();
       const inputDate = new Date(control.value).getTime();
-
-    }
-  }*/
-
-  // public userform = this.fb.group({
-  //   firstName: [''],
-  //   lastName: [''],
-  //   email: [''],
-  //   address: this.fb.group({
-  //     street: [''],
-  //     city: [''],
-  // })});
-
-  // user = {
-  //   firstName: 'John',
-  //   lastName: 'Doe',
-  //   email: 'jd@hotmail.com',
-  //   address: {
-  //     street: '123 Main St',
-  //     city: 'Anytown'
-  //   }
-  // };
+      return inputDate > today ? { futureDate: true } : null;
+    };
+  }
   postReport() {
     console.log(this.reportForm.valid);
     console.log(this.reportForm.value);
