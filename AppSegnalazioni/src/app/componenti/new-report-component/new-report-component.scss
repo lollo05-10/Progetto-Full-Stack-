@@ -1,15 +1,68 @@
+:host {
+  display: flex;
+  justify-content: center;   /* centra orizzontalmente */
+  align-items: flex-start;       /* inizia in alto */
+  height: 100vh;             /* occupa tutta l’altezza dello schermo */
+  background-color: #f3f6fb; /* sfondo chiaro */
+  padding-top: 50px;        /* spazio sopra il form */
+}
+
 .report-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background-color: white;
+  padding: 24px 32px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 80%;
+  max-width: 420px;
+}
+
+.cat-container {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
-.cat-container {
+
+.cat-item {
   display: flex;
-  flex-direction: column;
-  gap: 5px;
+  align-items: center;
+  gap: 10px;
 }
-:host {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+
+.remove-button {
+  margin-top: 4px;
+}
+
+/* --- MOBILE FRIENDLY --- */
+@media (max-width: 600px) {
+  :host {
+    align-items: flex-start;   /* inizia un po’ più in alto per evitare notch */
+    padding-top: 60px;
+  }
+
+  .report-form {
+    width: 90%;
+    padding: 16px 20px;
+    gap: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  mat-form-field {
+    width: 100%;
+  }
+
+  button {
+    font-size: 0.9rem;
+  }
+
+  .cat-item {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .remove-button {
+    align-self: flex-end;
+  }
 }

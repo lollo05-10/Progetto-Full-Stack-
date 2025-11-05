@@ -1,55 +1,55 @@
-.add-button {
-    position: fixed;
-    bottom: 106px;
-    right: 20px;
-    background-color: #0046FF;
-    color: white;
-    border-radius: 50%;
-    border: none;
-    width: 56px;
-    height: 56px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    z-index: 1000;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    cursor: pointer;
-    transition: transform 0.2s ease, background-color 0.2s ease;
+.add-button,
+.filter-button {
+  position: fixed;
+  right: 20px;
+  background-color: #0046FF;
+  color: white;
+  border-radius: 50%;
+  border: none;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  z-index: 1000;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease;
 }
 
-.add-button:hover, .filter-button:hover {
-    background-color: #4a7bff;
-    transform: scale(1.1);
+/* Specifica la posizione verticale */
+.add-button {
+  bottom: 106px;
 }
 
 .filter-button {
-    position: fixed;
-    bottom: 176px;
-    right: 20px;
-    background-color: #0046FF;
-    color: white;
-    border-radius: 50%;
-    border: none;
-    width: 56px;
-    height: 56px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    z-index: 1000;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    cursor: pointer;
-    transition: transform 0.2s ease, background-color 0.2s ease;
+  bottom: 176px;
 }
 
-/* Media query per schermi piccoli */
+/* Hover effect coerente */
+.add-button:hover,
+.filter-button:hover {
+  background-color: #4a7bff;
+  transform: scale(1.1);
+}
+
+/* --- MOBILE READY --- */
 @media (max-width: 600px) {
-    .add-button {
-        bottom: 70px;      /* più vicino al bordo inferiore */
-        right: 15px;       /* più vicino al bordo destro */
-        width: 48px;       /* leggermente più piccolo */
-        height: 48px;
-        font-size: 20px;   /* testo più piccolo */
-    }
+  .add-button,
+  .filter-button {
+    width: 48px;
+    height: 48px;
+    font-size: 20px;
+    right: 15px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+  }
+
+  .add-button {
+    bottom: 110px; /* più vicino al bordo inferiore */
+  }
+
+  .filter-button {
+    bottom: 170px; /* distanza proporzionata dall'altro bottone */
+  }
 }
