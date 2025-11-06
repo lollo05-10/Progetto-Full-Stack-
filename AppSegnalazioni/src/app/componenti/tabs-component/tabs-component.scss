@@ -3,9 +3,9 @@
 :host ::ng-deep {
   .my-custom-buttons {
     @include mat.fab-overrides((
-      container-color:#0046FF,         // colore di sfondo del FAB
+      container-color:#3D8361,         // colore di sfondo del FAB
       foreground-color: white,          // colore di testo e icone
-      state-layer-color: #8ABEB9,       // overlay per hover/focus/pressed
+      state-layer-color: #6dbe97,       // overlay per hover/focus/pressed
       pressed-state-layer-opacity: 1,   // intensità overlay quando premuto
       hover-state-layer-opacity: 0.4,   // intensità overlay su hover
       focus-state-layer-opacity: 0.2,   // intensità overlay su focus
@@ -21,8 +21,12 @@
   }
 }
 
-
-
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background-color: #3D8361; // stesso colore della barra
+}
 
 section {
   display: flex;
@@ -32,10 +36,10 @@ section {
   bottom: 0;
   left: 0;
   width: 100%;
-  background: #0046FF;
-  padding: 10px;
+  background: #3D8361;
+  padding: 10px 10px 0 10px; // niente padding-bottom per evitare spazio extra
   z-index: 1000;
-  padding-bottom: env(safe-area-inset-bottom);
+  padding-bottom: calc(env(safe-area-inset-bottom) - 4px);
 }
 
 .example-label {

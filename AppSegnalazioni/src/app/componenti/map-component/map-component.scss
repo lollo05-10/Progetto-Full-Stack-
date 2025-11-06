@@ -1,7 +1,14 @@
+:host {
+  display: block;
+  height: 100vh; /* altezza piena */
+  width: 100%;
+  position: relative; /* per pulsanti o overlay */
+  overflow: hidden;
+}
 
-
-#map{
-    height: 100%;
-    width: 100%;
+#map {
+  height: 100%;
+  width: 100%;
+  z-index: 0; /* base */
 }
 

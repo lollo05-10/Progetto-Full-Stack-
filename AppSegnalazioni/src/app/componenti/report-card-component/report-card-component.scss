@@ -1,18 +1,15 @@
 .example-card {
+  background-color: #f4f1e6;
+  justify-self: center;
   max-width: 400px;
   margin: 16px;
-  transition: transform 0.2s ease-in-out;
-
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-  }
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
 .example-header-image {
-  background-image: url('https://via.placeholder.com/40');
+  background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5ExGEHlPHckD3YbxH6e4kr25Ho2X4NifiQA&s');
   background-size: cover;
-  background-color: #3f51b5; // Colore di fallback
+  background-color: #666; // Colore di fallback
 }
 
 mat-card-title {
@@ -36,10 +33,61 @@ mat-card-actions {
   padding: 8px 16px;
 }
 
+.category-button{
+  text-transform: none;
+  font-weight: bold;
+  color: #265940 !important;
+
+  &:hover {
+    background-color: #c4f6d7 !important;
+  }
+}
+
+.detail-button{
+  text-transform: none;
+  font-weight: bold;
+  color: #265940 !important;
+
+  &:hover {
+    background-color: #c4f6d7 !important;
+  }
+}
+
+.share-button{
+  text-transform: none;
+  font-weight: bold;
+  color: #265940 !important;
+
+  &:hover {
+    background-color: #c4f6d7 !important;
+  }
+}
+
+.title-sub {
+  display: flex;
+  flex-direction: column;
+  margin-left: 12px;
+}
+
+.title-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap; 
+  gap: 12px;
+}
+
+
+
 // Stile responsive
 @media (max-width: 768px) {
   .example-card {
     max-width: 100%;
     margin: 8px;
+    margin-top: 30px;
+  }
+
+  .title-row {
+    flex-wrap: wrap;
+    gap: 6px;
   }
 }
