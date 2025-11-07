@@ -37,7 +37,7 @@ section {
   left: 0;
   width: 100%;
   background: #3D8361;
-  padding: 10px 10px 0 10px; // niente padding-bottom per evitare spazio extra
+  padding: 10px 10px 0 10px;// niente padding-bottom per evitare spazio extra
   z-index: 1000;
   padding-bottom: calc(env(safe-area-inset-bottom) - 4px);
 }
