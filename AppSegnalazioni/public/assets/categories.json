@@ -1,1 +1,8 @@
-["Mammals", "Birds", "Reptiles", "Amphibians", "Insects", "Fish", "Others"]
+[
+    "Maltrattamento", 
+    "Avvistamento di animale selvatico", 
+    "Smarrimento", 
+    "Ritrovamento", 
+    "Nido e/o cucciolata avvistato", 
+    "Others"
+]

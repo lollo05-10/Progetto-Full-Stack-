@@ -92,7 +92,6 @@ function createPopupContent(properties: any): string {
     image.height = 50;
     image.style.objectFit = 'cover';
     container.appendChild(image);
-
   }
 
   const titleDiv = document.createElement('div');
