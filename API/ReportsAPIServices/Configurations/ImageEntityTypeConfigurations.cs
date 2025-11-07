@@ -13,6 +13,10 @@ public class ImageEntityTypeConfigurations : IEntityTypeConfiguration<Image>
 {
     public void Configure(EntityTypeBuilder<Image> builder)
     {
+        builder.HasKey(x => x.Id);
+        builder.Property(x => x.Path)
+            .IsRequired()
+            .HasMaxLength(250);
 
     }
 }

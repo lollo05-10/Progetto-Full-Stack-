@@ -17,4 +17,5 @@ public class ReportViewModel
     public double Altitude { get; set; }
     public double Latitude { get; set; }
     public virtual ICollection<Image> Images { get; set; }
+    public virtual ICollection<CategoryViewModel> Categories { get; set; }
 }

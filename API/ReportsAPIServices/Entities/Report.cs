@@ -17,4 +17,6 @@ public class Report
     public int UserID { get; set; }
     public virtual User User { get; set; }
     public virtual ICollection<Image> Report_Images { get; set; }
+    public virtual ICollection<ReportCategory> ReportCategories { get; set; }
+
 }
