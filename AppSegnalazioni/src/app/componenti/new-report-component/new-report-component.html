@@ -1,41 +1,72 @@
 <form class="report-form" [formGroup]="reportForm" (ngSubmit)="postReport()">
-  <mat-form-field>
+  <mat-form-field appearance="outline">
     <mat-label>Report Title</mat-label>
     <input matInput type="text" formControlName="title" />
   </mat-form-field>
-  <mat-form-field>
+
+  <mat-form-field appearance="outline">
     <mat-label>Report Description</mat-label>
     <textarea formControlName="description" matInput></textarea>
   </mat-form-field>
+
   <div class="cat-container" formArrayName="categories">
-    <button matButton="outlined" type="button" (click)="addCategoryInput()">
+    @for (category of categories.controls; track category; let i = $index) {
+      <div>
+        <mat-form-field appearance="outline">
+          <mat-label>Report Category</mat-label>
+          <mat-select [formControlName]="i">
+            @for (name of categoryNames; track $index) {
+              <mat-option value="{{ name }}">{{ name }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <button
+          matFab
+          type="button"
+          (click)="removeCategoryInput(i)"
+          class="remove-button"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+
+      </div>
+    }
+    <button
+      matButton="outlined"
+      type="button"
+      (click)="addCategoryInput()"
+      class="add-button"
+    >
       Aggiungi Categoria
     </button>
-    @for (category of categories.controls; track category; let i = $index) {
-    <div>
-      <mat-form-field>
-        <mat-select [formControlName]="i">
-          @for (name of categoryNames; track $index) {
-          <mat-option value="{{ name }}">{{ name }}</mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
-      <button
-        matFab
-        type="button"
-        (click)="removeCategoryInput(i)"
-        class="remove-button"
-      >
-        <mat-icon>delete</mat-icon>
-      </button>
-    </div>
-    }
   </div>
-  <mat-form-field>
+
+  <mat-form-field appearance="outline">
     <mat-label>Report Date</mat-label>
     <input matInput type="datetime-local" formControlName="date" />
   </mat-form-field>
-  <button matButton="outlined" [disabled]="!reportForm.valid" type="submit">
+
+  <input 
+    type="file" 
+    accept="image/*" 
+    name="" 
+    id="" 
+    (change)="onImageSelected($event)" 
+    capture="enviroment" />
+
+  <div class="gallery">
+      @for (image of images; track $index) {
+      <img src="{{image}}" alt="">
+      }
+  </div>
+
+  <button 
+    matButton="outlined" 
+    [disabled]="!reportForm.valid" 
+    type="submit"
+    class="submit-button"
+  >
     Submit Report
   </button>
 </form>

@@ -48,6 +48,8 @@ export class NewReportComponent {
   public dataServ = inject(DataService);
   public categoryNames: string[] = [];
 
+  public images: string[] = [];
+
   constructor() {
     this.dataServ.getCategories().then((categories) => {
       this.categoryNames = categories;
@@ -71,13 +73,16 @@ export class NewReportComponent {
     return this.reportForm.get('categories') as FormArray;
   }
 
+  get image() {
+    return this.reportForm.get('image')?.value;
+  }
+
   addCategoryInput() {
     this.categories.push(this.fb.control(''));
   }
 
   removeCategoryInput(index: number) {
     console.log(index);
-
     this.categories.removeAt(index);
   }
 
@@ -88,6 +93,20 @@ export class NewReportComponent {
       const inputDate = new Date(control.value).getTime();
       return inputDate > today ? { futureDate: true } : null;
     };
+  }
+
+  onImageSelected(event: Event) {
+    const element = event.target as HTMLInputElement;
+    if (element.files && element.files.length > 0) {
+      const file = element.files[0];
+      const reader = new FileReader();
+      reader.onload = () => {
+
+        this.images.push(reader.result as string);
+
+      }
+      reader.readAsDataURL(file);
+    }
   }
   postReport() {
     console.log(this.reportForm.valid);
