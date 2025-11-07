@@ -9,8 +9,9 @@ namespace ReportsAPIServices.Models.DTOs.UpdateDTO;
 
 public class UpdateUserDTO
 {
+    public int Id { get; set; }
     public string? Username { get; set; }
     public string? Gender { get; set; }
     public DateOnly? DOB {  get; set; }
-    public virtual ICollection<Report>? User_Reports { get; set; }
+    public List<ReportDTO>? User_Reports { get; set; }
 }

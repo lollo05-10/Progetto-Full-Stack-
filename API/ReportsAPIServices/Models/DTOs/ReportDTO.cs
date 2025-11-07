@@ -14,7 +14,8 @@ public class ReportDTO
     public int UserId { get; set; }
     public virtual User User { get; set; }
     public DateTime ReportDate { get; set; }
-    public double Altitude { get; set; }
+    public double Longitude { get; set; }
     public double Latitude { get; set; }
-    public virtual ICollection<Image> Images { get; set; }
+    public List<ReportCategory>? Report_Categories { get; set; } 
+    public List<ImageDTO>? Images { get; set; }
 }

@@ -13,9 +13,9 @@ public class ReportViewModel
     public string Description { get; set; }
     public virtual User User { get; set; }
     public string Username { get; set; }
-    public DateOnly ReportDate { get; set; }
-    public double Altitude { get; set; }
+    public DateTime ReportDate { get; set; }
+    public double Longititude { get; set; }
     public double Latitude { get; set; }
-    public virtual ICollection<Image> Images { get; set; }
+    public virtual ICollection<ImageViewModel> Images { get; set; }
     public virtual ICollection<CategoryViewModel> Categories { get; set; }
 }

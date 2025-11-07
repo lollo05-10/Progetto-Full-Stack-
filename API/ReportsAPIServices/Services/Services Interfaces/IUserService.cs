@@ -8,4 +8,5 @@ namespace ReportsAPIServices.Services.Services_Interfaces;
 
 public interface IUserService
 {
+
 }

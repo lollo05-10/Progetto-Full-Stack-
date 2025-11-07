@@ -12,7 +12,7 @@ public class Report
     public string Title { get; set; }
     public string Description { get; set; }
     public DateTime ReportDate { get; set; }
-    public double Altitude { get; set; }
+    public double Longitude { get; set; }
     public double Latitude { get; set; }
     public int UserID { get; set; }
     public virtual User User { get; set; }

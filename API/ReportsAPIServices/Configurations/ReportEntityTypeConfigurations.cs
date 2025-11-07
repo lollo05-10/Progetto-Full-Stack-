@@ -25,7 +25,7 @@ public class ReportEntityTypeConfigurations : IEntityTypeConfiguration<Report>
         builder.Property(x => x.ReportDate)
             .IsRequired()
             .HasColumnType("timestamp with time zone");
-        builder.Property(x => x.Altitude)
+        builder.Property(x => x.Longitude)
             .IsRequired();
         builder.Property(x => x.Latitude)
             .IsRequired();
