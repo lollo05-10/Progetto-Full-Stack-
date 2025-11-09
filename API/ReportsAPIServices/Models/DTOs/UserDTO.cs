@@ -12,5 +12,5 @@ public class UserDTO
     public string Username { get; set; }
     public string Gender { get; set; }
     public DateOnly DOB { get; set; }
-    public virtual ICollection<Report> User_Reports { get; set; }
+    public bool isAdmin { get; set; }
 }
