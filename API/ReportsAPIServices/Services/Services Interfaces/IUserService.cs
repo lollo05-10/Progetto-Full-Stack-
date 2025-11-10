@@ -17,4 +17,6 @@ public interface IUserService
     Task<List<UserViewModel>> GetByFilter(UserFilter filter);
     Task<int> UpdatePatch(UpdateUserDTO updateEntity, int id);
     Task<int> Delete(int id);
+    Task<List<UserViewModel>> GetAllUsers();
+    Task<int> GetIdByUsername(string Username);
 }

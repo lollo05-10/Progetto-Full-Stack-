@@ -15,6 +15,7 @@ public class UserController : ControllerBase
     {
         _service = service;
     }
+
     [HttpPost]
     public async Task<IActionResult> Add([FromBody] UserDTO addEntity)
     {
@@ -37,7 +38,7 @@ public class UserController : ControllerBase
             return NotFound($"ATTENZIONE! User con id {id} non trovato!");
         return Ok(result);
     }
-    [HttpGet]
+    [HttpGet("filter")]
     public async Task<IActionResult> GetByFilter([FromQuery] UserFilter filter)
     {
         List<UserViewModel>? result = await _service.GetByFilter(filter);
@@ -66,5 +67,21 @@ public class UserController : ControllerBase
         if (result == -1)
             return BadRequest($"User con ID {id} non trovato!");
         return NoContent();
+    }
+    [HttpGet("all")]
+    public async Task<IActionResult> GetAll()
+    {
+        List<UserViewModel>? result = await _service.GetAllUsers();
+        if (result == null || !result.Any())
+            return NoContent();
+        return Ok(result);
+    }
+    [HttpGet("id")]
+    public async Task<IActionResult> GetId([FromQuery] string Username)
+    {
+        int result = await _service.GetIdByUsername(Username);
+        if (result == -1)
+            return BadRequest($"Utente con username {Username} non trovato!");
+        return Ok(result);
     }
 }

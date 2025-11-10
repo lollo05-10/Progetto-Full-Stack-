@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ReportsAPIServices.Models.View_Models;
 using ReportsAPIServices.Services.Services_Interfaces;
 
 namespace ReportsAPI.Controllers;
@@ -6,15 +7,15 @@ namespace ReportsAPI.Controllers;
 [Route("api/[controller]")]
 public class ImageController : ControllerBase
 {
-    private readonly IImageService _imgServ;
-    public ImageController(IImageService imgServ)
+    private readonly IImageService _service;
+    public ImageController(IImageService service)
     {
-        _imgServ = imgServ;
+        _service = service;
     }
     [HttpPost("upload/report/{reportId}")]
     public async Task<IActionResult> UploadFile(IFormFile file, [FromRoute] int reportId)
     {
-        string result = await  _imgServ.UploadFileImages(file, reportId);
+        string result = await  _service.UploadFileImages(file, reportId);
         if (result == "-1")
             return BadRequest("File vuoto");
         if (result == "-2")
@@ -24,5 +25,23 @@ public class ImageController : ControllerBase
         if (result == "-4")
             return BadRequest("La directory non esiste");
         return Created("Immagine aggiunta: ", result);
+    }
+    [HttpGet("all")]
+    public async Task<IActionResult> GetAll()
+    {
+        List<ImageViewModel>? result = await _service.GetAllImages();
+        if (result == null || !result.Any())
+            return NoContent();
+        return Ok(result);
+    }
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete([FromRoute] int id)
+    {
+        int result = await _service.DeleteImage(id);
+        if (result == -1)
+            return BadRequest($"Immagine con ID {id} non trovata!");
+        if (result == -2)
+            return BadRequest("Immagine non trovata!");
+        return NoContent();
     }
 }

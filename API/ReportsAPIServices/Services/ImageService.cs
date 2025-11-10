@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using ReportsAPIServices.Entities;
 using ReportsAPIServices.Models.DTOs;
+using ReportsAPIServices.Models.View_Models;
 using ReportsAPIServices.Services.Services_Interfaces;
 
 namespace ReportsAPIServices.Services;
@@ -20,6 +21,40 @@ public class ImageService : IImageService
     {
         _config = config;
         _context = context;
+    }
+
+    public async Task<int> DeleteImage(int id)
+    {
+        var img = await _context.Image.FindAsync(id);
+        if (img == null)
+            return -1;
+        try
+        {
+            if (File.Exists(img.Path))
+            {
+                File.Delete(img.Path);
+            }
+            _context.Image.Remove(img);
+            await _context.SaveChangesAsync();
+            return img.Id;
+        }
+        catch
+        {
+            return -2;
+        }
+    }
+
+    public async Task<List<ImageViewModel>> GetAllImages()
+    {
+        var img_list = await _context.Image.ToListAsync();
+        var imgViewModel = img_list.Select(i => new ImageViewModel
+        {
+            Id = i.Id,
+            Path = i.Path,
+            ReportId = i.ReportId,
+            Report = i.Report,
+        }).ToList();
+        return imgViewModel;
     }
 
     public async Task<string> UploadFileImages(IFormFile file, int reportId)
@@ -46,17 +81,27 @@ public class ImageService : IImageService
             return await Task.FromResult("-4");
         }
         string filePathFull = Path.Combine(filePath, file.FileName);
-        var imageEntity = new Image
+        try
         {
-            ReportId = reportId,
-            Path = filePathFull
-        };
-        await _context.Image.AddAsync(imageEntity);
-        await _context.SaveChangesAsync();
-        using (Stream fileStream = new FileStream(filePath, FileMode.Create))
-        {
-            await file.CopyToAsync(fileStream);
+            using (var fileStream = new FileStream(filePathFull, FileMode.Create))
+            {
+                await file.CopyToAsync(fileStream);
+            }
+
+            var imageEntity = new Image
+            {
+                ReportId = reportId,
+                Path = filePathFull
+            };
+
+            await _context.Image.AddAsync(imageEntity);
+            await _context.SaveChangesAsync();
+
+            return filePathFull;
         }
-        return filePathFull;
+        catch
+        {
+            return await Task.FromResult("-5"); 
+        }
     }
 }

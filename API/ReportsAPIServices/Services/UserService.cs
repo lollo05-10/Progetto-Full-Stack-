@@ -59,6 +59,22 @@ public class UserService : IUserService
         return entity.Id;
     }
 
+    public async Task<List<UserViewModel>> GetAllUsers()
+    {
+        var user_list = await _context.User
+            .Include(u => u.User_Reports)
+            .ToListAsync();
+        var userViewModelList = user_list.Select(u => new UserViewModel
+        {
+            Id = u.Id,
+            Username = u.Username,
+            Gender = u.Gender,
+            DOB = u.DOB,
+            Reports = u.User_Reports
+        }).ToList();
+        return userViewModelList;
+    }
+
     public async Task<List<UserViewModel>> GetByFilter(UserFilter filter)
     {
         IQueryable<User> query = _context.User.AsQueryable();
@@ -94,6 +110,14 @@ public class UserService : IUserService
             };
         }
         return entityViewModel;
+    }
+
+    public async Task<int> GetIdByUsername(string Username)
+    {
+        User? entity = await _context.User.FirstOrDefaultAsync(u => u.Username == Username);
+        if (entity == null)
+            return -1;
+        return entity.Id;
     }
 
     public async Task<int> UpdatePatch(UpdateUserDTO updateEntity, int id)

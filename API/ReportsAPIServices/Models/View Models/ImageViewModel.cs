@@ -9,8 +9,8 @@ namespace ReportsAPIServices.Models.View_Models;
 
 public class ImageViewModel
 {
-    //public int Id { get; set; }
+    public int Id { get; set; }
     public string Path { get; set; }
     public int ReportId { get; set; }
-    public virtual Report Report { get; set; }
+    public Report Report { get; set; }
 }
