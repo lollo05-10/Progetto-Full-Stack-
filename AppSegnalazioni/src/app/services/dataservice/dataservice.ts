@@ -22,7 +22,6 @@ export interface AppReport {
   providedIn: 'root',
 })
 export class DataService {
-
   private apiUrl = 'http://localhost:5077/api/reports';
   //cambiare il port con quello che vi appare
 
@@ -77,14 +76,13 @@ export class DataService {
 
   // data-service.ts
   registerUser(userData: any): Promise<any> {
-    return fetch('http://localhost:5077/api/user', {
+    return fetch('https://localhost:7189/api/User', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         username: userData.username,
-        password: userData.password,
         gender: userData.gender,
         dob: userData.dob,
         isAdmin: false,
@@ -122,12 +120,5 @@ export class DataService {
         console.error(err);
         return [];
       });
-  }
-
-  caricaReports() {
-    this.getReports().subscribe({
-      next: data => this.reports$.next(data),
-      error: err => console.error(err)
-    });
   }
 }

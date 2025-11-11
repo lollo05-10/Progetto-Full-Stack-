@@ -9,4 +9,3 @@ export interface Report {
   lng: number;
   distance?: number;
 }
-
