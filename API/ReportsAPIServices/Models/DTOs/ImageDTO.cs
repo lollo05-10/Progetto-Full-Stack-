@@ -9,6 +9,6 @@ namespace ReportsAPIServices.Models.DTOs;
 
 public class ImageDTO
 {
-    public int ReportId { get; set; }
+  
     public string Path { get; set; }
 }
