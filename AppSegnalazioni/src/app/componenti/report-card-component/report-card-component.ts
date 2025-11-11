@@ -1,9 +1,9 @@
 import { Component, input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { Report } from '../../models/report';
 import { RouterLink } from '@angular/router';
 import { MatIcon } from "@angular/material/icon";
+import { AppReport } from '../../services/dataservice/dataservice';
 
 @Component({
   selector: 'app-report-card',
@@ -13,5 +13,5 @@ import { MatIcon } from "@angular/material/icon";
 })
 export class ReportCardComponent {
 
- public report= input<Report>();
+ public report= input<AppReport>();
 }
