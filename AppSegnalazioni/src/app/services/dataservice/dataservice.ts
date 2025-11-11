@@ -6,7 +6,6 @@ import { Report } from '../../models/report';
 import { Injectable } from '@angular/core';
 import { FilterService } from '../filterservice/filter-service';
 
-
 export interface AppReport {
   id: number;
   description: string;
@@ -23,8 +22,7 @@ export interface AppReport {
   providedIn: 'root',
 })
 export class DataService {
-
-  private apiUrl = 'http://localhost:5077/api/reports'; 
+  private apiUrl = 'http://localhost:5077/api/reports';
   //cambiare il port con quello che vi appare
 
   private reports$ = new BehaviorSubject<AppReport[]>([]);
@@ -34,21 +32,22 @@ export class DataService {
   // Stream filtrato che unisce i report e il filtro attivo
   constructor(private http: HttpClient, private filterService: FilterService) {
     this.reportsFiltrati$ = combineLatest([
-    this.reports$,
-    this.filterService.categorieSelezionate$
-  ]).pipe(
-    map(([reports, filtro]) => {
-      if (!filtro || filtro.length === 0) return reports;
-      return reports.filter(r => r.categories.some(c => filtro.includes(c)));
-    })
-  );
+      this.reports$,
+      this.filterService.categorieSelezionate$,
+    ]).pipe(
+      map(([reports, filtro]) => {
+        if (!filtro || filtro.length === 0) return reports;
+        return reports.filter((r) =>
+          r.categories.some((c) => filtro.includes(c))
+        );
+      })
+    );
   }
 
-
-  getReportsGeoJson(): Promise<FeatureCollection>{
+  getReportsGeoJson(): Promise<FeatureCollection> {
     return fetch('./assets/report.geojson')
-    .then(resp => resp.json())
-    .catch(err => console.error(err))
+      .then((resp) => resp.json())
+      .catch((err) => console.error(err));
   }
 
   getReports(): Observable<AppReport[]> {
@@ -75,56 +74,51 @@ export class DataService {
     return this.http.post<AppReport>(this.apiUrl, report);
   }
 
-
- // data-service.ts
+  // data-service.ts
   registerUser(userData: any): Promise<any> {
-    return fetch('http://localhost:5077/api/user', {
+    return fetch('https://localhost:7189/api/User', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         username: userData.username,
-        password: userData.password,
         gender: userData.gender,
         dob: userData.dob,
-        isAdmin: false
-      })
+        isAdmin: false,
+      }),
     })
-  .then(resp => {
-    if (!resp.ok) {
-      throw new Error('Errore durante la registrazione');
-    }
-    return resp.json();
-  })
-  .catch(err => {
-    console.error('Errore registerUser:', err);
-    throw err;
-  });
-}
+      .then((resp) => {
+        if (!resp.ok) {
+          throw new Error('Errore durante la registrazione');
+        }
+        return resp.json();
+      })
+      .catch((err) => {
+        console.error('Errore registerUser:', err);
+        throw err;
+      });
+  }
 
   // Simula l'ID dell'utente loggato (per ora fisso)
 
   getCurrentUserId(): Promise<number> {
-  return Promise.resolve(1);
-}
+    return Promise.resolve(1);
+  }
 
-getUserById(userId: number): Promise<User> {
-  return fetch(`http://localhost:5077/api/user/${userId}`)
-    .then(resp => resp.json())
-    .catch(err => console.error(err));
-}
+  getUserById(userId: number): Promise<User> {
+    return fetch(`http://localhost:5077/api/user/${userId}`)
+      .then((resp) => resp.json())
+      .catch((err) => console.error(err));
+  }
 
-  
-
-getUserReports(userId: number): Promise<Report[]> {
-  return fetch(`/api/user/${userId}/reports`)
-    .then(resp => resp.json())
-    .then((reports: Report[]) => reports) 
-    .catch(err => {
-      console.error(err);
-      return []; 
-    });
-}
-
+  getUserReports(userId: number): Promise<Report[]> {
+    return fetch(`/api/user/${userId}/reports`)
+      .then((resp) => resp.json())
+      .then((reports: Report[]) => reports)
+      .catch((err) => {
+        console.error(err);
+        return [];
+      });
+  }
 }

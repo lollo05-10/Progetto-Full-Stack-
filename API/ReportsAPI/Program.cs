@@ -16,7 +16,10 @@ public class Program
         {
             options.AddPolicy("AllowAngular", policy =>
             {
-                policy.WithOrigins("http://localhost:4200")
+                policy.WithOrigins(
+                    "http://localhost:4200",
+                    "https://localhost:4200"
+                    )
                       .AllowAnyHeader()
                       .AllowAnyMethod()
                       .AllowCredentials();
@@ -44,9 +47,6 @@ public class Program
 
         // Configure the HTTP request pipeline.
 
-
-        app.UseCors("AllowAngular");
-
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
@@ -54,7 +54,7 @@ public class Program
         }
 
         app.UseHttpsRedirection();
-       
+        app.UseCors("AllowAngular");
         app.UseAuthorization();
        
         app.MapControllers();

@@ -10,21 +10,17 @@
         <!-- Username -->
         <mat-form-field appearance="outline">
           <mat-label>Username</mat-label>
-          <input matInput formControlName="username" placeholder="Il tuo username">
-          <mat-error *ngIf="registrationForm.get('username')?.hasError('required')">
+          <input
+            matInput
+            formControlName="username"
+            placeholder="Il tuo username"
+          />
+          <mat-error
+            *ngIf="registrationForm.get('username')?.hasError('required')"
+          >
             Username obbligatorio
           </mat-error>
         </mat-form-field>
-
-        <!-- Password -->
-        <mat-form-field appearance="outline">
-          <mat-label>Password</mat-label>
-          <input matInput formControlName="password" type="password" placeholder="Minimo 6 caratteri">
-          <mat-error *ngIf="registrationForm.get('password')?.hasError('minlength')">
-            Minimo 6 caratteri
-          </mat-error>
-        </mat-form-field>
-
         <!-- Gender -->
         <mat-form-field appearance="outline">
           <mat-label>Genere</mat-label>
@@ -37,7 +33,7 @@
         <!-- Data di nascita -->
         <mat-form-field appearance="outline">
           <mat-label>Data di nascita</mat-label>
-          <input matInput formControlName="dob" type="date">
+          <input matInput formControlName="dob" type="date" />
         </mat-form-field>
 
         <!-- Termini e condizioni -->
@@ -49,20 +45,22 @@
 
         <!-- Pulsanti -->
         <div class="form-actions">
-          <button 
-            mat-raised-button 
-            color="primary" 
+          <button
+            mat-raised-button
+            color="primary"
             type="submit"
             [disabled]="!registrationForm.valid || isLoading"
-            class="submit-button">
-            {{ isLoading ? 'Registrazione...' : 'Registrati' }}
+            class="submit-button"
+          >
+            {{ isLoading ? "Registrazione..." : "Registrati" }}
           </button>
-          
-          <button 
-            mat-button 
-            type="button" 
+
+          <button
+            mat-button
+            type="button"
             routerLink="/login"
-            class="login-link">
+            class="login-link"
+          >
             Hai già un account? Accedi
           </button>
         </div>
