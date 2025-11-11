@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { FeatureCollection } from 'geojson';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, combineLatest, map, Observable } from 'rxjs';
+import { FilterService } from '../filterservice/filter-service';
 
 export interface AppReport {
   id: number;
@@ -18,10 +19,27 @@ export interface AppReport {
   providedIn: 'root',
 })
 export class DataService {
-  constructor(private http: HttpClient) {}
 
   private apiUrl = 'http://localhost:5077/api/reports'; 
   //cambiare il port con quello che vi appare
+
+  private reports$ = new BehaviorSubject<AppReport[]>([]);
+
+  reportsFiltrati$!: Observable<AppReport[]>;
+
+  // Stream filtrato che unisce i report e il filtro attivo
+  constructor(private http: HttpClient, private filterService: FilterService) {
+
+    this.reportsFiltrati$ = combineLatest([
+      this.reports$,
+      this.filterService.categorieSelezionate$
+    ]).pipe(
+      map(([reports, filtro]) => {
+        if (!filtro || filtro.length === 0) return reports;
+        return reports.filter(r => r.categories.some(c => filtro.includes(c)));
+      })
+    );
+  }
 
   getReportsGeoJson(): Promise<FeatureCollection>{
     return fetch('./assets/report.geojson')
@@ -51,5 +69,13 @@ export class DataService {
 
   postReport(report: AppReport): Observable<AppReport> {
     return this.http.post<AppReport>(this.apiUrl, report);
+  }
+
+  // --- Metodo per caricare i report all’avvio ---
+  caricaReports() {
+    this.getReports().subscribe({
+      next: data => this.reports$.next(data),
+      error: err => console.error(err)
+    });
   }
 }

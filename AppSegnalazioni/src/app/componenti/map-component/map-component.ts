@@ -3,7 +3,8 @@ import * as L from 'leaflet';
 import { GeoJsonObject } from 'geojson';
 import { MatIconModule } from "@angular/material/icon";
 import { ButtonsComponent } from "../buttons-component/buttons-component";
-import { DataService } from '../../services/dataservice/dataservice';
+import { AppReport, DataService } from '../../services/dataservice/dataservice';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-map-component',
@@ -14,13 +15,18 @@ import { DataService } from '../../services/dataservice/dataservice';
 export class MapComponent {
   private map: L.Map | undefined;
 
-  constructor(private dataServ: DataService) {}
+  reportsFiltrati$!: Observable<AppReport[]>;
+  // il ! serve per dire a typescript che do il valore dopo
+  
+  constructor(private dataServ: DataService) {
+    this.reportsFiltrati$ = this.dataServ.reportsFiltrati$;
+  }
   
   ngAfterViewInit() {
     this.setupMap();
   }
   
-async setupMap() {
+  async setupMap() {
     this.map = L.map('map');
 
     this.map.setView([44.40614435613236, 8.949400422559357], 13);

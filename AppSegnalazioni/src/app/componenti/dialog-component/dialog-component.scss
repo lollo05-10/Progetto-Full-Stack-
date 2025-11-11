@@ -1,0 +1,28 @@
+h2{
+    margin: 20px;
+}
+
+.categories-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 15px;
+  justify-content: flex-start;
+
+  button {
+    min-width: 180px;
+    border: 1px solid #ccc;
+    transition: all 0.2s ease;
+
+    &.selected {
+      background-color: #1976d2; /* blu Material primary */
+      color: white;
+      border-color: #1976d2;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    &:hover {
+      background-color: rgba(25, 118, 210, 0.1);
+    }
+  }
+}
