@@ -1,0 +1,19 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "title": "Report 1",
+        "description": "Descrizione esempio"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.952429644016547,
+          44.406903727968086
+        ]
+      }
+    }
+  ]
+}

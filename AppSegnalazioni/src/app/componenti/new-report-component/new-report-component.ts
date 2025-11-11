@@ -8,7 +8,7 @@ import {
   ValidationErrors,
   ValidatorFn,
 } from '@angular/forms';
-import { DataService } from '../../services/dataservice/dataservice';
+import { AppReport, DataService } from '../../services/dataservice/dataservice';
 import {
   MatAnchor,
   MatButton,
@@ -47,8 +47,16 @@ export class NewReportComponent {
   private fb = new FormBuilder();
   public dataServ = inject(DataService);
   public categoryNames: string[] = [];
-
   public images: string[] = [];
+
+  /*
+  constructor() {
+    this.dataServ.getCategories().subscribe({
+      next: (categories) => this.categoryNames = categories,
+      error: (err) => console.error('Errore caricamento categorie:', err)
+    });
+  }
+  */
 
   constructor() {
     this.dataServ.getCategories().then((categories) => {
@@ -108,8 +116,23 @@ export class NewReportComponent {
       reader.readAsDataURL(file);
     }
   }
+
   postReport() {
-    console.log(this.reportForm.valid);
-    console.log(this.reportForm.value);
+    const report = {
+      ...this.reportForm.value,
+      images: this.images,
+      latitude: 0,
+      longitude: 0
+    } as AppReport;
+
+    this.dataServ.postReport(report).subscribe({
+      next: (res) => {
+        console.log('Report salvato con successo:', res);
+        this.reportForm.reset();
+        this.images = [];
+      },
+      error: (err) => console.error('Errore nel post report:', err)
+    });
+
   }
 }

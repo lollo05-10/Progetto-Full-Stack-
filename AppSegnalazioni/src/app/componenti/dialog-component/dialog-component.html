@@ -1,0 +1,18 @@
+<h2>Filtro Categoria:</h2>
+
+<div class="categories-buttons">
+  <button
+    mat-raised-button
+    *ngFor="let cat of categories"
+    [class.selected]="selectedCategories.includes(cat)"
+    (click)="toggleCategory(cat)">
+    {{ cat }}
+  </button>
+</div>
+
+<mat-dialog-actions class="bottom-buttons">
+  <button mat-button [mat-dialog-close]="null">Annulla</button>
+  <button mat-button (click)="applyFilter()" [mat-dialog-close]="selectedCategories">
+    Applica
+  </button>
+</mat-dialog-actions>

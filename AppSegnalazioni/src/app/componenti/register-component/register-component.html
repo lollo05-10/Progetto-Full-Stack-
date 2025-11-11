@@ -1,1 +1,70 @@
-<p>register-component works!</p>
+<div class="registration-container">
+  <mat-card class="registration-form">
+    <mat-card-header>
+      <mat-card-title>Crea Account</mat-card-title>
+      <mat-card-subtitle>Registrati per iniziare a segnalare</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+        <!-- Username -->
+        <mat-form-field appearance="outline">
+          <mat-label>Username</mat-label>
+          <input
+            matInput
+            formControlName="username"
+            placeholder="Il tuo username"
+          />
+          <mat-error
+            *ngIf="registrationForm.get('username')?.hasError('required')"
+          >
+            Username obbligatorio
+          </mat-error>
+        </mat-form-field>
+        <!-- Gender -->
+        <mat-form-field appearance="outline">
+          <mat-label>Genere</mat-label>
+          <mat-select formControlName="gender">
+            <mat-option value="M">Uomo</mat-option>
+            <mat-option value="F">Donna</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Data di nascita -->
+        <mat-form-field appearance="outline">
+          <mat-label>Data di nascita</mat-label>
+          <input matInput formControlName="dob" type="date" />
+        </mat-form-field>
+
+        <!-- Termini e condizioni -->
+        <div class="terms-section">
+          <mat-checkbox formControlName="acceptTerms">
+            Accetto i termini e condizioni
+          </mat-checkbox>
+        </div>
+
+        <!-- Pulsanti -->
+        <div class="form-actions">
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="!registrationForm.valid || isLoading"
+            class="submit-button"
+          >
+            {{ isLoading ? "Registrazione..." : "Registrati" }}
+          </button>
+
+          <button
+            mat-button
+            type="button"
+            routerLink="/login"
+            class="login-link"
+          >
+            Hai già un account? Accedi
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
