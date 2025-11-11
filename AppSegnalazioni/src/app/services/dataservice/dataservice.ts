@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FeatureCollection } from 'geojson';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, combineLatest, map, Observable } from 'rxjs';
-import { FilterService } from '../filterservice/filter-service';
+import { Observable } from 'rxjs';
 
 export interface AppReport {
   id: number;
@@ -15,6 +14,7 @@ export interface AppReport {
   longitude: number;
   distance?: number;
 }
+
 @Injectable({
   providedIn: 'root',
 })
@@ -69,13 +69,5 @@ export class DataService {
 
   postReport(report: AppReport): Observable<AppReport> {
     return this.http.post<AppReport>(this.apiUrl, report);
-  }
-
-  // --- Metodo per caricare i report all’avvio ---
-  caricaReports() {
-    this.getReports().subscribe({
-      next: data => this.reports$.next(data),
-      error: err => console.error(err)
-    });
   }
 }
