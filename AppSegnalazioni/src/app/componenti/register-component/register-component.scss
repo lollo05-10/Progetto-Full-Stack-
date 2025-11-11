@@ -1,0 +1,93 @@
+.registration-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  padding: 40px 20px;
+  box-sizing: border-box;
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
+
+.registration-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background-color: #f4f1e6;
+  padding: 40px 32px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 450px;
+}
+
+mat-form-field {
+  width: 100%;
+  
+  ::ng-deep .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__leading,
+  ::ng-deep .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__notch,
+  ::ng-deep .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__trailing {
+    border-color: #FF914D;
+  }
+
+  ::ng-deep .mdc-text-field:not(.mdc-text-field--disabled) .mdc-floating-label {
+    color: #FF914D;
+  }
+
+  ::ng-deep .mdc-text-field--focused:not(.mdc-text-field--disabled) .mdc-floating-label {
+    color: #fc7e2f;
+  }
+}
+
+.terms-section {
+  margin: 15px 0;
+  
+  ::ng-deep .mdc-checkbox__background {
+    border-color: #FF914D;
+  }
+}
+
+.form-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.submit-button {
+  background-color: #fc7e2f;
+  color: #f8f8f8;
+  padding: 12px;
+  font-size: 16px;
+
+  &:hover {
+    background-color: #FF914D;
+  }
+
+  &:disabled {
+    background-color: #cccccc;
+    color: #666666;
+    cursor: not-allowed;
+  }
+}
+
+.login-link {
+  color: #FF914D;
+  text-align: center;
+}
+
+/* === RESPONSIVE MOBILE === */
+@media (max-width: 600px) {
+  .registration-container {
+    padding: 20px 15px;
+  }
+
+  .registration-form {
+    padding: 30px 20px;
+    gap: 12px;
+  }
+
+  .form-actions {
+    gap: 12px;
+  }
+}
