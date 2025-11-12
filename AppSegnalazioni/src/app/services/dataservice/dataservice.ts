@@ -32,11 +32,25 @@ export class DataService {
     );
   }
 
-  getReportsGeoJson(): Promise<FeatureCollection> {
-    return fetch('./assets/report.geojson')
-      .then((resp) => resp.json())
-      .catch((err) => console.error(err));
-  }
+getReportsFromGeoJson(): Promise<AppReport[]> {
+  return fetch('./assets/report.geojson')
+    .then(resp => resp.json())
+    .then((geojson: any) => {
+      return geojson.features.map((f: any, index: number) => ({
+        id: index + 1, // puoi generare un id progressivo
+        title: f.properties.title,
+        description: f.properties.description,
+        categories: [f.properties.category], // array per compatibilità filter
+        images: f.properties.image ? [f.properties.image] : [],
+        latitude: f.geometry.coordinates[1], // GeoJSON: [lng, lat]
+        longitude: f.geometry.coordinates[0],
+      }));
+    })
+    .catch(err => {
+      console.error(err);
+      return [];
+    });
+}
 
   getReports(): Observable<AppReport[]> {
     return this.http.get<AppReport[]>(this.apiUrl);
@@ -109,4 +123,10 @@ export class DataService {
         return [];
       });
   }
+
+  async caricaReportsDaGeoJson() {
+    const reports = await this.getReportsFromGeoJson();
+    this.reports$.next(reports); 
+  }
+
 }

@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import * as L from 'leaflet';
-import { GeoJsonObject } from 'geojson';
 import { MatIconModule } from '@angular/material/icon';
 import { ButtonsComponent } from '../buttons-component/buttons-component';
 import { DataService } from '../../services/dataservice/dataservice';
@@ -14,10 +13,9 @@ import { AppReport } from '../../models/app-report';
   styleUrl: './map-component.scss',
 })
 export class MapComponent {
-  private map: L.Map | undefined;
-
+  private map!: L.Map;
+  private markersLayer!: L.LayerGroup;
   reportsFiltrati$!: Observable<AppReport[]>;
-  // il ! serve per dire a typescript che do il valore dopo
 
   constructor(private dataServ: DataService) {
     this.reportsFiltrati$ = this.dataServ.reportsFiltrati$;
@@ -28,78 +26,83 @@ export class MapComponent {
   }
 
   async setupMap() {
-    this.map = L.map('map');
+    this.map = L.map('map').setView([44.406144, 8.9494], 13);
 
-    this.map.setView([44.40614435613236, 8.949400422559357], 13);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap contributors',
+    }).addTo(this.map);
 
-    const tileLayer = L.tileLayer(
-      'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-      {
-        maxZoom: 19,
-        attribution:
-          '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-      }
-    );
+    this.markersLayer = L.layerGroup().addTo(this.map);
 
-    tileLayer.addTo(this.map);
+    // 🔥 Carica i dati GeoJSON nel DataService
+    await this.dataServ.caricaReportsDaGeoJson();
 
-    const reports = await this.dataServ.getReportsGeoJson();
-
-    const geojsonLayer = L.geoJSON(reports as GeoJsonObject, {
-      pointToLayer: this.myPointToLayer,
-      onEachFeature: this.myOnEachFeature,
+    // 🔥 Ora ascolta i dati filtrati
+    this.reportsFiltrati$.subscribe((reports) => {
+      this.updateMarkers(reports);
     });
-
-    geojsonLayer.addTo(this.map);
   }
 
-  myPointToLayer(point: any, latLng: L.LatLng) {
-    const colorCategory = {
-      Selvatici: 'red',
-      Avvistamenti: 'orange',
+  /** Aggiorna marker con colore in base alla categoria */
+  private updateMarkers(reports: AppReport[]) {
+    this.markersLayer.clearLayers();
+
+    const colorCategory: Record<string, string> = {
+      'Maltrattamento': 'red',
+      'Avvistamento di animale selvatico': 'orange',
+      'Smarrimento': 'yellow',
+      'Ritrovamento': 'green',
+      'Nido e/o cucciolata avvistato': 'blue',
+      'Others': 'purple',
     };
 
-    //const categoryKey = String(point?.properties?.categories.?[0] ?? '');
-    //const fillColor = colorCategory[categoryKey as keyof typeof colorCategory] || 'blue';
+    reports.forEach((report) => {
+      if (report.latitude && report.longitude) {
+        const mainCategory = report.categories?.[0] ?? 'Others';
+        const color = colorCategory[mainCategory] || 'gray';
 
-    const geojsonMarkerOptions = {
-      radius: 8,
-      fillColor: 'blue',
-      color: '#000',
-      weight: 1,
-      opacity: 1,
-      fillOpacity: 0.8,
-    };
-    return L.circleMarker(latLng, geojsonMarkerOptions);
+        const marker = L.circleMarker([report.latitude, report.longitude], {
+          radius: 8,
+          fillColor: color,
+          color: '#000',
+          weight: 1,
+          opacity: 1,
+          fillOpacity: 0.8,
+        });
+
+        marker.bindPopup(this.createPopupContent(report));
+        marker.addTo(this.markersLayer);
+      }
+    });
   }
 
-  myOnEachFeature(point: any, layer: L.Layer) {
-    if (point.properties && point.properties.title) {
-      console.log('point properties:', point.properties);
-      const content = createPopupContent(point.properties);
-      layer.bindPopup(content);
+  /** Crea contenuto popup con immagine + titolo */
+  private createPopupContent(report: AppReport): string {
+    const container = document.createElement('div');
+    container.style.display = 'flex';
+    container.className = 'popup-content';
+
+    if (report.images && report.images.length > 0) {
+      const image = document.createElement('img');
+      image.src = report.images[0];
+      image.width = 50;
+      image.height = 50;
+      image.style.objectFit = 'cover';
+      image.style.marginRight = '8px';
+      container.appendChild(image);
     }
+
+    const titleDiv = document.createElement('div');
+    titleDiv.className = 'popup-title';
+    titleDiv.textContent = report.title;
+    container.appendChild(titleDiv);
+
+    const descriptionDiv = document.createElement('div');
+    descriptionDiv.className = 'popup-description';
+    descriptionDiv.textContent = report.description;
+    titleDiv.appendChild(descriptionDiv);
+
+    return container.outerHTML;
   }
-}
-
-function createPopupContent(properties: any): string {
-  const container = document.createElement('div');
-  container.style.display = 'flex';
-  container.className = 'popup-content';
-
-  if (properties.images && properties.images.length > 0) {
-    const image = document.createElement('img');
-    image.src = properties.images[0];
-    image.width = 50;
-    image.height = 50;
-    image.style.objectFit = 'cover';
-    container.appendChild(image);
-  }
-
-  const titleDiv = document.createElement('div');
-  titleDiv.className = 'popup-title';
-  titleDiv.textContent = properties.title;
-  container.appendChild(titleDiv);
-
-  return container.outerHTML;
 }

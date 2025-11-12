@@ -4,15 +4,92 @@
     {
       "type": "Feature",
       "properties": {
-        "title": "Report 1",
-        "description": "Descrizione esempio"
+        "title": "Cane maltrattato",
+        "description": "Segnalato cane incatenato senza acqua.",
+        "category": "Maltrattamento",
+        "image": "https://italian-cane-corso.com/wp-content/uploads/2025/04/cane-corso-8786701_1920.jpg"
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [
-          8.952429644016547,
-          44.406903727968086
-        ]
+        "coordinates": [8.9524296, 44.4069037]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "title": "Volpe avvistata",
+        "description": "Volpe vista vicino al parco urbano.",
+        "category": "Avvistamento di animale selvatico",
+        "image": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.955102, 44.409877]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "title": "Gatto smarrito",
+        "description": "Gatto bianco con collarino rosso scomparso in via Roma.",
+        "category": "Smarrimento",
+        "image": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.9478, 44.4053]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "title": "Cane ritrovato",
+        "description": "Cane trovato al parco Brignole, taglia media.",
+        "category": "Ritrovamento",
+        "image": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.9512, 44.4081]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "title": "Nido di rondini",
+        "description": "Nido costruito sotto il balcone, con 3 piccoli.",
+        "category": "Nido e/o cucciolata avvistato",
+        "image": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.9464, 44.4048]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "title": "Riccio nel giardino",
+        "description": "Avvistato un riccio ferito in un giardino condominiale.",
+        "category": "Avvistamento di animale selvatico",
+        "image": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.9585, 44.4103]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "title": "Segnalazione varia",
+        "description": "Altro tipo di segnalazione non categorizzata.",
+        "category": "Others",
+        "image": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.9537, 44.4075]
       }
     }
   ]
