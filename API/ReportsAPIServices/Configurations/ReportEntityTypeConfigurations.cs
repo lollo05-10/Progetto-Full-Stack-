@@ -16,12 +16,12 @@ public class ReportEntityTypeConfigurations : IEntityTypeConfiguration<Report>
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Title)
             .IsRequired()
-            .HasMaxLength(20);
+            .HasMaxLength(50);
         builder.HasIndex(x => x.Title)
             .IsUnique();
         builder.Property(x => x.Description)
             .IsRequired()
-            .HasMaxLength(50);
+            .HasMaxLength(75);
         builder.Property(x => x.ReportDate)
             .IsRequired()
             .HasColumnType("timestamp with time zone");

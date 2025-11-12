@@ -14,4 +14,5 @@ public class User
     public DateOnly DOB { get; set; }
     public bool isAdmin { get; set; }
     public virtual ICollection<Report> User_Reports { get; set; }
+    public virtual Permission Permission { get; set; }
 }

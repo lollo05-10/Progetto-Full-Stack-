@@ -21,6 +21,6 @@ public class CategoryEntityTypeConfigurations : IEntityTypeConfiguration<Categor
         builder.HasIndex(x => x.Name)
             .IsUnique();
         builder.Property(x => x.Description)
-            .HasMaxLength(50);
+            .HasMaxLength(75);
     }
 }
