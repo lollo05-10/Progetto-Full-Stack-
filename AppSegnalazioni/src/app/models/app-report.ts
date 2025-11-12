@@ -1,11 +1,11 @@
-export interface Report {
-  id?: number;
+export interface AppReport {
+  id: number;
   description?: string;
   title: string;
   date: string;
   categories: string[];
   images: string[];
-  lat: number;
-  lng: number;
+  latitude: number;
+  longitude: number;
   distance?: number;
 }

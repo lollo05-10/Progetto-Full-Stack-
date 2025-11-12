@@ -2,21 +2,9 @@ import { FeatureCollection } from 'geojson';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, combineLatest, map, Observable } from 'rxjs';
 import { User } from '../../models/user';
-import { Report } from '../../models/report';
 import { Injectable } from '@angular/core';
 import { FilterService } from '../filterservice/filter-service';
-
-export interface AppReport {
-  id: number;
-  description: string;
-  title: string;
-  date: string;
-  categories: string[];
-  images: string[];
-  latitude: number;
-  longitude: number;
-  distance?: number;
-}
+import { AppReport } from '../../models/app-report';
 
 @Injectable({
   providedIn: 'root',
@@ -112,10 +100,10 @@ export class DataService {
       .catch((err) => console.error(err));
   }
 
-  getUserReports(userId: number): Promise<Report[]> {
+  getUserReports(userId: number): Promise<AppReport[]> {
     return fetch(`/api/user/${userId}/reports`)
       .then((resp) => resp.json())
-      .then((reports: Report[]) => reports)
+      .then((reports: AppReport[]) => reports)
       .catch((err) => {
         console.error(err);
         return [];

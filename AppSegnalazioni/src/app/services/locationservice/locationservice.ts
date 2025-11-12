@@ -1,19 +1,11 @@
 import { Injectable } from '@angular/core';
 import L from 'leaflet';
-import { Report } from '../../models/report';
-
-
-declare global {
-  interface Report {
-    distance?: number;
-  }
-}
-
+import { AppReport } from '../../models/app-report';
 @Injectable({
   providedIn: 'root'
 })
 export class LocationService {
-    sortReportsByDistance(reports: Report[]) : Promise<Report[]> {
+    sortReportsByDistance(reports: AppReport[]) : Promise<AppReport[]> {
   
     return this.getPosition()
     .then((pos) => this.calculateReportsDistance(reports, pos))
@@ -28,19 +20,19 @@ export class LocationService {
     })
   }
 
-  calculateReportsDistance(reports: Report[], position: GeolocationPosition) : Report[] {
+  calculateReportsDistance(reports: AppReport[], position: GeolocationPosition) : AppReport[] {
   
     const userLatLng = L.latLng(position.coords.latitude, position.coords.longitude);
 
-    const reportsWithDistance: Report[] = [];
+    const reportsWithDistance: AppReport[] = [];
     for (const report of reports) {
-      report.distance = userLatLng.distanceTo(L.latLng(report.lat,report.lng));
+      report.distance = userLatLng.distanceTo(L.latLng(report.latitude,report.longitude));
       reportsWithDistance.push(report);
     }
     return reportsWithDistance;
   }
 
-  sortByDistance(reports: Report[]) : Report[] {
+  sortByDistance(reports: AppReport[]) : AppReport[] {
 
     return reports.sort((r1,r2)=>{
       if(r1.distance!>r2.distance!) return 1;

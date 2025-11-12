@@ -35,21 +35,21 @@
     <div mat-card-avatar class="example-header-image"></div>
     <div class="title-sub">
       <div class="title-row">
-        <mat-card-title>{{report()?.title}}</mat-card-title>
+        <mat-card-title>{{userReport()?.title}}</mat-card-title>
         <mat-icon>chevron_right</mat-icon>
-        <button mat-button class="category-button">{{report()?.categories}}</button>
+        <button mat-button class="category-button">{{userReport()?.categories}}</button>
       </div>
-      <mat-card-subtitle>{{report()?.distance}}</mat-card-subtitle>
+      <mat-card-subtitle>{{userReport()?.distance}}</mat-card-subtitle>
     </div>
   </mat-card-header>
-  <img mat-card-image src="{{report()!.images[0]}}" alt="Photo of a Shiba Inu">
+  <img mat-card-image src="{{userReport()!.images[0]}}" alt="Photo of a Shiba Inu">
   <mat-card-content>
     <p>
-     {{report()?.description}}
+     {{userReport()?.description}}
     </p>
   </mat-card-content>
   <mat-card-actions>
-  <button class="detail-button" matButton routerLink="/detail/{{report()?.id}}">
+  <button class="detail-button" matButton routerLink="/detail/{{userReport()?.id}}">
     DETAIL
   </button>
       <button class="share-button" matButton>

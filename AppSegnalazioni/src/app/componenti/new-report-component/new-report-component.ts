@@ -8,7 +8,7 @@ import {
   ValidationErrors,
   ValidatorFn,
 } from '@angular/forms';
-import { AppReport, DataService } from '../../services/dataservice/dataservice';
+import { DataService } from '../../services/dataservice/dataservice';
 import {
   MatAnchor,
   MatButton,
@@ -24,6 +24,7 @@ import {
 import { MatInputModule, MatInput } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
+import { AppReport } from '../../models/app-report';
 @Component({
   selector: 'app-new-report-component',
   imports: [
@@ -109,10 +110,8 @@ export class NewReportComponent {
       const file = element.files[0];
       const reader = new FileReader();
       reader.onload = () => {
-
         this.images.push(reader.result as string);
-
-      }
+      };
       reader.readAsDataURL(file);
     }
   }
@@ -122,7 +121,7 @@ export class NewReportComponent {
       ...this.reportForm.value,
       images: this.images,
       latitude: 0,
-      longitude: 0
+      longitude: 0,
     } as AppReport;
 
     this.dataServ.postReport(report).subscribe({
@@ -131,8 +130,7 @@ export class NewReportComponent {
         this.reportForm.reset();
         this.images = [];
       },
-      error: (err) => console.error('Errore nel post report:', err)
+      error: (err) => console.error('Errore nel post report:', err),
     });
-
   }
 }

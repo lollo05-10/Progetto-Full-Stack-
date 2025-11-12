@@ -1,2 +1,4 @@
 <app-buttons-component></app-buttons-component>
-<app-report-card></app-report-card>
+@for (userReport of userReports; track $index) {
+    <app-report-card [userReport]="userReport"></app-report-card>
+}

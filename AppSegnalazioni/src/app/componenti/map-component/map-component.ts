@@ -1,31 +1,32 @@
 import { Component } from '@angular/core';
 import * as L from 'leaflet';
 import { GeoJsonObject } from 'geojson';
-import { MatIconModule } from "@angular/material/icon";
-import { ButtonsComponent } from "../buttons-component/buttons-component";
-import { AppReport, DataService } from '../../services/dataservice/dataservice';
+import { MatIconModule } from '@angular/material/icon';
+import { ButtonsComponent } from '../buttons-component/buttons-component';
+import { DataService } from '../../services/dataservice/dataservice';
 import { Observable } from 'rxjs';
+import { AppReport } from '../../models/app-report';
 
 @Component({
   selector: 'app-map-component',
   imports: [MatIconModule, ButtonsComponent],
   templateUrl: './map-component.html',
-  styleUrl: './map-component.scss'
+  styleUrl: './map-component.scss',
 })
 export class MapComponent {
   private map: L.Map | undefined;
 
   reportsFiltrati$!: Observable<AppReport[]>;
   // il ! serve per dire a typescript che do il valore dopo
-  
+
   constructor(private dataServ: DataService) {
     this.reportsFiltrati$ = this.dataServ.reportsFiltrati$;
   }
-  
+
   ngAfterViewInit() {
     this.setupMap();
   }
-  
+
   async setupMap() {
     this.map = L.map('map');
 
@@ -53,16 +54,13 @@ export class MapComponent {
   }
 
   myPointToLayer(point: any, latLng: L.LatLng) {
-
     const colorCategory = {
       Selvatici: 'red',
-      Avvistamenti: 'orange'
-
-    }
+      Avvistamenti: 'orange',
+    };
 
     //const categoryKey = String(point?.properties?.categories.?[0] ?? '');
     //const fillColor = colorCategory[categoryKey as keyof typeof colorCategory] || 'blue';
-
 
     const geojsonMarkerOptions = {
       radius: 8,
@@ -76,7 +74,6 @@ export class MapComponent {
   }
 
   myOnEachFeature(point: any, layer: L.Layer) {
-
     if (point.properties && point.properties.title) {
       console.log('point properties:', point.properties);
       const content = createPopupContent(point.properties);
@@ -90,7 +87,6 @@ function createPopupContent(properties: any): string {
   container.style.display = 'flex';
   container.className = 'popup-content';
 
-  
   if (properties.images && properties.images.length > 0) {
     const image = document.createElement('img');
     image.src = properties.images[0];
