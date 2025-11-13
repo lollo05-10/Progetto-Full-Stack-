@@ -56,9 +56,11 @@ getReportsFromGeoJson(): Promise<AppReport[]> {
     return this.http.get<AppReport[]>(this.apiUrl);
   }
 
-  getReport(id: number): Observable<AppReport> {
-    return this.http.get<AppReport>(`${this.apiUrl}/${id}`);
-  }
+  getReport(id: number): Promise<AppReport> {
+  return fetch(`this.apiUrl${id}`)
+    .then(resp => resp.json())
+    .catch(err => console.error(err));
+}
 
   getCategories(): Promise<string[]> {
     return fetch('./assets/categories.json')
@@ -102,12 +104,7 @@ getReportsFromGeoJson(): Promise<AppReport[]> {
       });
   }
 
-  // Simula l'ID dell'utente loggato (per ora fisso)
-
-  getCurrentUserId(): Promise<number> {
-    return Promise.resolve(1);
-  }
-
+  
   getUserById(userId: number): Promise<User> {
     return fetch(`http://localhost:5077/api/user/${userId}`)
       .then((resp) => resp.json())

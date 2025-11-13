@@ -1,1 +1,49 @@
-<p>detail-component works!</p>
+<div class="detail-container">
+  @if (isLoading) {
+    <div class="loading">Caricamento...</div>
+  } @else if (report) {
+    <mat-card class="report-detail">
+      <mat-card-header>
+        <mat-card-title>{{ report.title }}</mat-card-title>
+        <mat-card-subtitle>
+          {{ report.date | date:'dd/MM/yyyy' }} • 
+          {{ report.distance }}m di distanza
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <!-- Galleria immagini -->
+      @if (report.images.length > 0) {
+        <div class="image-gallery">
+          @for (image of report.images; track $index) {
+            <img [src]="image" [alt]="report.title" class="detail-image">
+          }
+        </div>
+      }
+
+      <mat-card-content>
+        <p class="description">{{ report.description }}</p>
+        
+        <!-- Categorie -->
+        @if (report.categories.length > 0) {
+          <div class="categories">
+            <h3>Categorie:</h3>
+            <div class="category-list">
+              @for (category of report.categories; track $index) {
+                <span class="category-badge">{{ category }}</span>
+              }
+            </div>
+          </div>
+        }
+
+        <!-- Coordinate -->
+        <div class="coordinates">
+          <h3>Posizione:</h3>
+          <p>Lat: {{ report.latitude | number:'1.4-4' }}</p>
+          <p>Lng: {{ report.longitude | number:'1.4-4' }}</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  } @else {
+    <div class="error">Report non trovato</div>
+  }
+</div>

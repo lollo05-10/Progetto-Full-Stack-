@@ -15,5 +15,6 @@ export const routes: Routes = [
   { path: 'new-report', component: NewReportComponent },
   { path: 'user', component: UserComponent },
   { path:'register',component: RegisterComponent },
+  { path: 'detail/:id', component: DetailComponent },
   { path: '**', component: NotfoundComponent },
 ];

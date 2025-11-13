@@ -1,0 +1,56 @@
+.detail-container {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.report-detail {
+  margin-bottom: 30px;
+}
+
+.image-gallery {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 16px;
+}
+
+.detail-image {
+  width: 300px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.description {
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 16px 0;
+}
+
+.categories, .coordinates {
+  margin: 20px 0;
+}
+
+.category-list {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.category-badge {
+  background: #e3f2fd;
+  color: #1976d2;
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 14px;
+}
+
+.loading, .error {
+  text-align: center;
+  padding: 40px;
+  font-size: 18px;
+}
+
+.loading { color: #666; }
+.error { color: #d32f2f; }
