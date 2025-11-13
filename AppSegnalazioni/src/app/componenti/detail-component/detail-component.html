@@ -6,8 +6,7 @@
       <mat-card-header>
         <mat-card-title>{{ report.title }}</mat-card-title>
         <mat-card-subtitle>
-          {{ report.date | date:'dd/MM/yyyy' }} • 
-          {{ report.distance }}m di distanza
+          {{ report.reportDate | date:'dd/MM/yyyy' }} • 
         </mat-card-subtitle>
       </mat-card-header>
 
@@ -24,11 +23,11 @@
         <p class="description">{{ report.description }}</p>
         
         <!-- Categorie -->
-        @if (report.categories.length > 0) {
+        @if (report.categoryNames.length > 0) {
           <div class="categories">
             <h3>Categorie:</h3>
             <div class="category-list">
-              @for (category of report.categories; track $index) {
+              @for (category of report.categoryNames; track $index) {
                 <span class="category-badge">{{ category }}</span>
               }
             </div>
