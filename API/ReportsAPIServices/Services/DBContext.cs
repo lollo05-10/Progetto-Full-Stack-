@@ -12,6 +12,7 @@ public class DatabaseContext : DbContext
     public DbSet<Image> Image { get; set; }
     public DbSet<Report> Report { get; set; }
     public DbSet<ReportCategory> ReportCategories { get; set; }
+    public DbSet<Permission> Permission { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema("animal_reports");

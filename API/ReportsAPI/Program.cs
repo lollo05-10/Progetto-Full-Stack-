@@ -52,8 +52,8 @@ public class Program
             app.UseSwagger();
             app.UseSwaggerUI();
         }
-
-        app.UseHttpsRedirection();
+        app.UseRouting();
+        //app.UseHttpsRedirection();
         app.UseCors("AllowAngular");
         app.UseAuthorization();
        

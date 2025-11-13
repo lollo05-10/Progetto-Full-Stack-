@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GeoJSON.Net;
+using GeoJSON.Net.Feature;
 
 namespace ReportsAPIServices.Services.Services_Interfaces;
 
@@ -25,5 +27,5 @@ public interface IReportService
     Task UpdateAsync(UpdateReportDTO updateEntity);
 
     Task DeleteByIdAsync(int id);
-
+    Task<FeatureCollection> GetReportsGeoJSON();
 }

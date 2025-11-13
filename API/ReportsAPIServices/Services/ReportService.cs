@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using GeoJSON.Net.Feature;
+using GeoJSON.Net.Geometry;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using ReportsAPIServices.Entities;
 using ReportsAPIServices.Models.DTOs;
@@ -280,9 +282,31 @@ public class ReportService : IReportService
         await _context.SaveChangesAsync();
     }
 
-
-
-
-
-
+    public async Task<FeatureCollection> GetReportsGeoJSON()
+    {
+        var reports = await _context.Report
+            .Include(r => r.User)
+            .Include(r => r.Report_Images)
+            .Include(r => r.ReportCategories)
+            .ThenInclude(r => r.Category)
+            .ToListAsync();
+        var features = new List<Feature>();
+        foreach (var report in reports)
+        {
+            var point = new Point(new Position(report.Latitude, report.Longitude));
+            var report_props = new Dictionary<string, object>
+            {
+                {"Id", report.Id },
+                { "Title", report.Title },
+                { "Description", report.Description },
+                { "ReportDate", report.ReportDate },
+                { "Username", report.User.Username },
+                { "Images", report.Report_Images.Select(img => img.Path).ToList() },
+                { "Categories" , report.ReportCategories.Select( rc => rc.Category.Name ).ToList() }
+            };
+            var feature = new Feature(point, report_props);
+            features.Add(feature);
+        }
+        return new FeatureCollection(features);
+    }
 }
