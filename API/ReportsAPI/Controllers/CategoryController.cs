@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ReportsAPIServices.Models.DTOs;
+using ReportsAPIServices.Models.DTOs.UpdateDTO;
 using ReportsAPIServices.Services.Services_Interfaces;
 
 namespace ReportsAPI.Controllers;
@@ -41,9 +42,9 @@ public class CategoryController : ControllerBase
     }
 
     [HttpPut("update")]
-    public async Task<IActionResult> Update([FromBody] CategoryDTO updateEntity)
+    public async Task<IActionResult> Update([FromBody] UpdateCategoryDTO updateEntity, [FromRoute] int id)
     {
-        await _serviceCategory.UpdateAsync(updateEntity);
+        await _serviceCategory.UpdateAsync(updateEntity, id);
         return Ok();
     }
 
@@ -53,17 +54,20 @@ public class CategoryController : ControllerBase
         await _serviceCategory.DeleteByIdAsync(id);
         return Ok();
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
+    [HttpGet("name/{id}")]
+    public async Task<IActionResult> GetCategoryName([FromRoute] int id)
+    {
+        var result = await _serviceCategory.GetNameAsync(id);
+        if (result == "-1")
+            return NotFound($"Categoria con ID {id} non trovata!");
+        return Ok(result);
+    }
+    [HttpGet("description/{id}")]
+    public async Task<IActionResult> GetCategoryDescription([FromRoute] int id)
+    {
+        var result = await _serviceCategory.GetDescriptionAsync(id);
+        if (result == "-1")
+            return NotFound($"Categoria con ID {id} non trovata!");
+        return Ok(result);
+    }
 }

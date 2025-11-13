@@ -26,10 +26,10 @@ public class ImageController : ControllerBase
             return BadRequest("La directory non esiste");
         return Created("Immagine aggiunta: ", result);
     }
-    [HttpGet("all")]
-    public async Task<IActionResult> GetAll()
+    [HttpGet("report/{reportId}/images")]
+    public async Task<IActionResult> GetAllReportImages([FromRoute] int reportId)
     {
-        List<ImageViewModel>? result = await _service.GetAllImages();
+        List<ImageViewModel>? result = await _service.GetAllReportImages(reportId);
         if (result == null || !result.Any())
             return NoContent();
         return Ok(result);

@@ -1,8 +1,21 @@
-import { ChangeDetectionStrategy, Component, inject, AfterViewInit } from '@angular/core';
-import { FormBuilder, FormArray, Validators, AbstractControl, ValidationErrors, ValidatorFn, ReactiveFormsModule } from '@angular/forms';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  AfterViewInit,
+} from '@angular/core';
+import {
+  FormBuilder,
+  FormArray,
+  Validators,
+  AbstractControl,
+  ValidationErrors,
+  ValidatorFn,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { DataService } from '../../services/dataservice/dataservice';
 import * as L from 'leaflet';
-import { AppReport } from '../../models/app-report';
+import { AppReport, AppReportPost } from '../../models/app-report';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -23,8 +36,8 @@ import { MatButtonModule } from '@angular/material/button';
     MatInputModule,
     MatSelectModule,
     MatIconModule,
-    MatButtonModule
-  ]
+    MatButtonModule,
+  ],
 })
 export class NewReportComponent implements AfterViewInit {
   private fb = new FormBuilder();
@@ -37,7 +50,7 @@ export class NewReportComponent implements AfterViewInit {
   private markersLayer!: L.LayerGroup;
 
   constructor() {
-    this.dataServ.getCategories().then(categories => {
+    this.dataServ.getCategories().then((categories) => {
       this.categoryNames = categories;
     });
   }
@@ -50,7 +63,7 @@ export class NewReportComponent implements AfterViewInit {
     this.map = L.map('map').setView([44.406144, 8.9494], 13);
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
-      attribution: '&copy; OpenStreetMap contributors'
+      attribution: '&copy; OpenStreetMap contributors',
     }).addTo(this.map);
 
     this.markersLayer = L.layerGroup().addTo(this.map);
@@ -69,12 +82,18 @@ export class NewReportComponent implements AfterViewInit {
 
   // FORM REATTIVO
   public reportForm = this.fb.group({
-    title: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(20)]],
-    description: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(50)]],
+    title: [
+      '',
+      [Validators.required, Validators.minLength(5), Validators.maxLength(20)],
+    ],
+    description: [
+      '',
+      [Validators.required, Validators.minLength(5), Validators.maxLength(50)],
+    ],
     categories: this.fb.array([this.fb.control('')]),
     date: ['', [Validators.required, this.DateValidator()]],
     latitude: [0, Validators.required],
-    longitude: [0, Validators.required]
+    longitude: [0, Validators.required],
   });
 
   get categories(): FormArray {
@@ -116,8 +135,7 @@ export class NewReportComponent implements AfterViewInit {
 
     const formValue = this.reportForm.value;
 
-    const report: AppReport = {
-      id: 0,
+    const report: AppReportPost = {
       userId: 1,
       reportDate: new Date().toISOString(),
       title: formValue.title ?? '',
@@ -125,8 +143,10 @@ export class NewReportComponent implements AfterViewInit {
       latitude: formValue.latitude ?? 0,
       longitude: formValue.longitude ?? 0,
       // filtriamo null e forziamo il tipo string[]
-      categoryNames: (formValue.categories ?? []).filter((c): c is string => !!c),
-      images: this.images.map(base64 => ({ base64 })),
+      categoryNames: (formValue.categories ?? []).filter(
+        (c): c is string => !!c
+      ),
+      images: this.images.map((path) => ({ path })),
     };
 
     this.dataServ.postReport(report).subscribe({
@@ -136,10 +156,9 @@ export class NewReportComponent implements AfterViewInit {
         this.images = [];
         this.markersLayer.clearLayers();
       },
-      error: err => console.error('Errore nel post report:', err)
+      error: (err) => console.error('Errore nel post report:', err),
     });
   }
-
 
   /** Aggiunge o aggiorna marker sulla mappa in stile MapComponent */
   private addOrUpdateMarker() {
@@ -149,12 +168,12 @@ export class NewReportComponent implements AfterViewInit {
 
       const mainCategory = this.categories.controls[0]?.value || 'Others';
       const colorCategory: Record<string, string> = {
-        'Maltrattamento': 'red',
+        Maltrattamento: 'red',
         'Avvistamento di animale selvatico': 'orange',
-        'Smarrimento': 'yellow',
-        'Ritrovamento': 'green',
+        Smarrimento: 'yellow',
+        Ritrovamento: 'green',
         'Nido e/o cucciolata avvistato': 'blue',
-        'Others': 'purple',
+        Others: 'purple',
       };
       const color = colorCategory[mainCategory] || 'gray';
 
@@ -164,7 +183,7 @@ export class NewReportComponent implements AfterViewInit {
         color: '#000',
         weight: 1,
         opacity: 1,
-        fillOpacity: 0.8
+        fillOpacity: 0.8,
       });
 
       marker.bindPopup(this.createPopupContent());
