@@ -36,7 +36,7 @@ public class UserService : IUserService
             Username = addEntity.Username,
             Gender = addEntity.Gender,
             DOB = addEntity.DOB,
-            isAdmin = addEntity.isAdmin
+            isAdmin = addEntity.isAdmin,
         };
         if ((string.IsNullOrEmpty(addEntity.Username)) || (addEntity.Username.Length > 10))
             return -2;

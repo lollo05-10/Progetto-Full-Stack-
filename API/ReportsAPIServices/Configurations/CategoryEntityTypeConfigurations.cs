@@ -17,10 +17,10 @@ public class CategoryEntityTypeConfigurations : IEntityTypeConfiguration<Categor
         builder
             .Property(x => x.Name)
             .IsRequired()
-            .HasMaxLength(25);
+            .HasMaxLength(75);
         builder.HasIndex(x => x.Name)
             .IsUnique();
         builder.Property(x => x.Description)
-            .HasMaxLength(75);
+            .HasMaxLength(100);
     }
 }
