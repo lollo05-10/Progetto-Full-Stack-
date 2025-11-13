@@ -111,34 +111,34 @@ export class NewReportComponent implements AfterViewInit {
     }
   }
 
-postReport() {
-  if (!this.reportForm.valid) return;
+  postReport() {
+    if (!this.reportForm.valid) return;
 
-  const formValue = this.reportForm.value;
+    const formValue = this.reportForm.value;
 
-  const report: AppReport = {
-    id: 0,
-    userId: 1,
-    reportDate: new Date().toISOString(),
-    title: formValue.title ?? '',
-    description: formValue.description ?? '',
-    latitude: formValue.latitude ?? 0,
-    longitude: formValue.longitude ?? 0,
-    // filtriamo null e forziamo il tipo string[]
-    categoryNames: (formValue.categories ?? []).filter((c): c is string => !!c),
-    images: this.images.map(base64 => ({ base64 })),
-  };
+    const report: AppReport = {
+      id: 0,
+      userId: 1,
+      reportDate: new Date().toISOString(),
+      title: formValue.title ?? '',
+      description: formValue.description ?? '',
+      latitude: formValue.latitude ?? 0,
+      longitude: formValue.longitude ?? 0,
+      // filtriamo null e forziamo il tipo string[]
+      categoryNames: (formValue.categories ?? []).filter((c): c is string => !!c),
+      images: this.images.map(base64 => ({ base64 })),
+    };
 
-  this.dataServ.postReport(report).subscribe({
-    next: () => {
-      console.log('Report salvato con successo');
-      this.reportForm.reset();
-      this.images = [];
-      this.markersLayer.clearLayers();
-    },
-    error: err => console.error('Errore nel post report:', err)
-  });
-}
+    this.dataServ.postReport(report).subscribe({
+      next: () => {
+        console.log('Report salvato con successo');
+        this.reportForm.reset();
+        this.images = [];
+        this.markersLayer.clearLayers();
+      },
+      error: err => console.error('Errore nel post report:', err)
+    });
+  }
 
 
   /** Aggiunge o aggiorna marker sulla mappa in stile MapComponent */

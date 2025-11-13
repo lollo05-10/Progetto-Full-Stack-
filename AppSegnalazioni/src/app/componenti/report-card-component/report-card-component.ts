@@ -14,4 +14,10 @@ import { AppReport } from '../../models/app-report';
 export class ReportCardComponent {
 
  public userReport= input<AppReport>();
+
+ get reportImage(): string {
+  const images = this.userReport()?.images;
+  return images && images.length > 0 ? images[0].base64 : './assets/no-image.jpg';
+}
+
 }
