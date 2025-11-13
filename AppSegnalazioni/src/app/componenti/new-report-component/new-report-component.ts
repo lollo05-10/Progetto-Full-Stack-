@@ -1,89 +1,84 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import {
-  FormArray,
-  FormBuilder,
-  ReactiveFormsModule,
-  Validators,
-  AbstractControl,
-  ValidationErrors,
-  ValidatorFn,
-} from '@angular/forms';
+import { ChangeDetectionStrategy, Component, inject, AfterViewInit } from '@angular/core';
+import { FormBuilder, FormArray, Validators, AbstractControl, ValidationErrors, ValidatorFn, ReactiveFormsModule } from '@angular/forms';
 import { DataService } from '../../services/dataservice/dataservice';
-import {
-  MatAnchor,
-  MatButton,
-  MatFabButton,
-  MatIconButton,
-} from '@angular/material/button';
-import {
-  MatSelectModule,
-  MatFormField,
-  MatLabel,
-  MatOption,
-} from '@angular/material/select';
-import { MatInputModule, MatInput } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIcon } from '@angular/material/icon';
+import * as L from 'leaflet';
 import { AppReport } from '../../models/app-report';
+import { CommonModule } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+
 @Component({
   selector: 'app-new-report-component',
+  templateUrl: './new-report-component.html',
+  styleUrls: ['./new-report-component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
   imports: [
     ReactiveFormsModule,
-    MatAnchor,
-    MatFormField,
-    MatLabel,
-    MatInput,
-    MatOption,
+    CommonModule,
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
-    MatIcon,
-    MatFabButton,
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl: './new-report-component.html',
-  styleUrl: './new-report-component.scss',
+    MatIconModule,
+    MatButtonModule
+  ]
 })
-export class NewReportComponent {
+export class NewReportComponent implements AfterViewInit {
   private fb = new FormBuilder();
-  public dataServ = inject(DataService);
+  private dataServ = inject(DataService);
+
   public categoryNames: string[] = [];
   public images: string[] = [];
 
-  /*
-  constructor() {
-    this.dataServ.getCategories().subscribe({
-      next: (categories) => this.categoryNames = categories,
-      error: (err) => console.error('Errore caricamento categorie:', err)
-    });
-  }
-  */
+  private map!: L.Map;
+  private markersLayer!: L.LayerGroup;
 
   constructor() {
-    this.dataServ.getCategories().then((categories) => {
+    this.dataServ.getCategories().then(categories => {
       this.categoryNames = categories;
     });
   }
 
-  public reportForm = this.fb.group({
-    title: [
-      '',
-      [Validators.required, Validators.minLength(5), Validators.maxLength(20)],
-    ],
-    description: [
-      '',
-      [Validators.required, Validators.minLength(5), Validators.maxLength(50)],
-    ],
-    categories: this.fb.array([this.fb.control('')]),
-    date: ['', [Validators.required, this.DateValidator()]],
-  });
-
-  get categories() {
-    return this.reportForm.get('categories') as FormArray;
+  ngAfterViewInit(): void {
+    this.setupMap();
   }
 
-  get image() {
-    return this.reportForm.get('image')?.value;
+  private setupMap() {
+    this.map = L.map('map').setView([44.406144, 8.9494], 13);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(this.map);
+
+    this.markersLayer = L.layerGroup().addTo(this.map);
+
+    // Click sulla mappa per aggiungere un nuovo report
+    this.map.on('click', (e: L.LeafletMouseEvent) => {
+      const { lat, lng } = e.latlng;
+
+      // Aggiorna il form
+      this.reportForm.patchValue({ latitude: lat, longitude: lng });
+
+      // Aggiorna marker dinamico
+      this.addOrUpdateMarker();
+    });
+  }
+
+  // FORM REATTIVO
+  public reportForm = this.fb.group({
+    title: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(20)]],
+    description: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(50)]],
+    categories: this.fb.array([this.fb.control('')]),
+    date: ['', [Validators.required, this.DateValidator()]],
+    latitude: [0, Validators.required],
+    longitude: [0, Validators.required]
+  });
+
+  get categories(): FormArray {
+    return this.reportForm.get('categories') as FormArray;
   }
 
   addCategoryInput() {
@@ -91,7 +86,6 @@ export class NewReportComponent {
   }
 
   removeCategoryInput(index: number) {
-    console.log(index);
     this.categories.removeAt(index);
   }
 
@@ -111,26 +105,92 @@ export class NewReportComponent {
       const reader = new FileReader();
       reader.onload = () => {
         this.images.push(reader.result as string);
+        this.addOrUpdateMarker(); // Aggiorna marker se immagine selezionata
       };
       reader.readAsDataURL(file);
     }
   }
 
-  postReport() {
-    const report = {
-      ...this.reportForm.value,
-      images: this.images,
-      latitude: 0,
-      longitude: 0,
-    } as unknown as AppReport;
+postReport() {
+  if (!this.reportForm.valid) return;
 
-    this.dataServ.postReport(report).subscribe({
-      next: (res) => {
-        console.log('Report salvato con successo:', res);
-        this.reportForm.reset();
-        this.images = [];
-      },
-      error: (err) => console.error('Errore nel post report:', err),
-    });
+  const formValue = this.reportForm.value;
+
+  const report: AppReport = {
+    id: 0,
+    userId: 1,
+    reportDate: new Date().toISOString(),
+    title: formValue.title ?? '',
+    description: formValue.description ?? '',
+    latitude: formValue.latitude ?? 0,
+    longitude: formValue.longitude ?? 0,
+    // filtriamo null e forziamo il tipo string[]
+    categoryNames: (formValue.categories ?? []).filter((c): c is string => !!c),
+    images: this.images.map(base64 => ({ base64 })),
+  };
+
+  this.dataServ.postReport(report).subscribe({
+    next: () => {
+      console.log('Report salvato con successo');
+      this.reportForm.reset();
+      this.images = [];
+      this.markersLayer.clearLayers();
+    },
+    error: err => console.error('Errore nel post report:', err)
+  });
+}
+
+
+  /** Aggiunge o aggiorna marker sulla mappa in stile MapComponent */
+  private addOrUpdateMarker() {
+    const { latitude, longitude } = this.reportForm.value;
+    if (latitude && longitude) {
+      this.markersLayer.clearLayers();
+
+      const mainCategory = this.categories.controls[0]?.value || 'Others';
+      const colorCategory: Record<string, string> = {
+        'Maltrattamento': 'red',
+        'Avvistamento di animale selvatico': 'orange',
+        'Smarrimento': 'yellow',
+        'Ritrovamento': 'green',
+        'Nido e/o cucciolata avvistato': 'blue',
+        'Others': 'purple',
+      };
+      const color = colorCategory[mainCategory] || 'gray';
+
+      const marker = L.circleMarker([latitude, longitude], {
+        radius: 8,
+        fillColor: color,
+        color: '#000',
+        weight: 1,
+        opacity: 1,
+        fillOpacity: 0.8
+      });
+
+      marker.bindPopup(this.createPopupContent());
+      marker.addTo(this.markersLayer);
+    }
+  }
+
+  /** Popup dinamico per marker temporaneo */
+  private createPopupContent(): string {
+    const container = document.createElement('div');
+    container.style.display = 'flex';
+
+    if (this.images.length > 0) {
+      const image = document.createElement('img');
+      image.src = this.images[0];
+      image.width = 50;
+      image.height = 50;
+      image.style.objectFit = 'cover';
+      image.style.marginRight = '8px';
+      container.appendChild(image);
+    }
+
+    const textDiv = document.createElement('div');
+    textDiv.innerHTML = `<strong>${this.reportForm.value.title}</strong><br>${this.reportForm.value.description}`;
+    container.appendChild(textDiv);
+
+    return container.outerHTML;
   }
 }
