@@ -122,7 +122,7 @@ export class NewReportComponent {
       images: this.images,
       latitude: 0,
       longitude: 0,
-    } as AppReport;
+    } as unknown as AppReport;
 
     this.dataServ.postReport(report).subscribe({
       next: (res) => {

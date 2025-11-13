@@ -5,6 +5,8 @@ import { AppReport } from '../../models/app-report';
   providedIn: 'root'
 })
 export class LocationService {
+
+  /*
     sortReportsByDistance(reports: AppReport[]) : Promise<AppReport[]> {
   
     return this.getPosition()
@@ -32,6 +34,8 @@ export class LocationService {
     return reportsWithDistance;
   }
 
+  
+
   sortByDistance(reports: AppReport[]) : AppReport[] {
 
     return reports.sort((r1,r2)=>{
@@ -42,4 +46,5 @@ export class LocationService {
       }
     })
   }
+    */
 }

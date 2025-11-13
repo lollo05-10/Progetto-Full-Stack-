@@ -35,10 +35,9 @@ export class MapComponent {
 
     this.markersLayer = L.layerGroup().addTo(this.map);
 
-    // 🔥 Carica i dati GeoJSON nel DataService
+    // Carica i dati GeoJSON nel DataService
     await this.dataServ.caricaReportsDaGeoJson();
 
-    // 🔥 Ora ascolta i dati filtrati
     this.reportsFiltrati$.subscribe((reports) => {
       this.updateMarkers(reports);
     });
@@ -59,7 +58,7 @@ export class MapComponent {
 
     reports.forEach((report) => {
       if (report.latitude && report.longitude) {
-        const mainCategory = report.categories?.[0] ?? 'Others';
+        const mainCategory = report.categoryNames?.[0] ?? 'Others';
         const color = colorCategory[mainCategory] || 'gray';
 
         const marker = L.circleMarker([report.latitude, report.longitude], {
@@ -77,7 +76,6 @@ export class MapComponent {
     });
   }
 
-  /** Crea contenuto popup con immagine + titolo */
   private createPopupContent(report: AppReport): string {
     const container = document.createElement('div');
     container.style.display = 'flex';
@@ -85,7 +83,7 @@ export class MapComponent {
 
     if (report.images && report.images.length > 0) {
       const image = document.createElement('img');
-      image.src = report.images[0];
+      image.src = report.images[0].base64;
       image.width = 50;
       image.height = 50;
       image.style.objectFit = 'cover';

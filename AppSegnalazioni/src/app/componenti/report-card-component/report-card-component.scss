@@ -4,6 +4,7 @@
   max-width: 400px;
   margin: 16px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  overflow: hidden;
 }
 
 .example-header-image {
@@ -11,6 +12,15 @@
   background-size: cover;
   background-color: #666; // Colore di fallback
 }
+
+.example-card img {
+  min-height: 350px;
+  max-height: 350px;
+  max-width: 400px;
+  min-width: 400px;
+  object-fit: cover;
+}
+
 
 mat-card-title {
   font-size: 1.2em;

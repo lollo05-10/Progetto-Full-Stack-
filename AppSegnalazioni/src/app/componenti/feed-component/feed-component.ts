@@ -1,4 +1,5 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { ButtonsComponent } from '../buttons-component/buttons-component';
 import { ReportCardComponent } from '../report-card-component/report-card-component';
@@ -11,6 +12,7 @@ import { AppReport } from '../../models/app-report';
 @Component({
   selector: 'app-feed-component',
   imports: [
+    CommonModule,
     MatIconModule,
     ButtonsComponent,
     ReportCardComponent,
@@ -19,14 +21,21 @@ import { AppReport } from '../../models/app-report';
   templateUrl: './feed-component.html',
   styleUrl: './feed-component.scss',
 })
-export class FeedComponent {
+export class FeedComponent implements OnInit {
   reportsFiltrati$!: Observable<AppReport[]>;
-  // il ! serve per dire a typescript che do il valore dopo
+
+  private locationServ = inject(LocationService);
 
   constructor(private dataServ: DataService) {
     this.reportsFiltrati$ = this.dataServ.reportsFiltrati$;
   }
 
-  private locationServ = inject(LocationService);
-  public userReports: AppReport[] = [];
+  async ngOnInit() {
+    // carica i report dal file GeoJSON
+    await this.dataServ.caricaReportsDaGeoJson();
+  }
+
+  trackById(index: number, report: AppReport): number {
+    return report.id;
+  }
 }

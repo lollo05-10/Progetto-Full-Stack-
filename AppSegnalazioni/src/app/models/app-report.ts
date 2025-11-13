@@ -1,11 +1,15 @@
 export interface AppReport {
   id: number;
-  description: string;
   title: string;
-  date: string;
-  categories: string[];
-  images: string[];
-  latitude: number;
+  description: string;
+  userId: number;
+  reportDate: string;
   longitude: number;
-  distance?: number;
+  latitude: number;
+  categoryNames: string[];
+  images: ImageDTO[];
+}
+
+export interface ImageDTO {
+  base64: string;
 }

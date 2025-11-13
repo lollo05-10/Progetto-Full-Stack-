@@ -10,7 +10,7 @@ import { AppReport } from '../../models/app-report';
   providedIn: 'root',
 })
 export class DataService {
-  private apiUrl = 'http://localhost:5077/api/reports';
+  private apiUrl = 'http://localhost:5077/api/Report';
   //cambiare il port con quello che vi appare
 
   private reports$ = new BehaviorSubject<AppReport[]>([]);
@@ -26,7 +26,7 @@ export class DataService {
       map(([reports, filtro]) => {
         if (!filtro || filtro.length === 0) return reports;
         return reports.filter((r) =>
-          r.categories.some((c) => filtro.includes(c))
+          r.categoryNames.some((c) => filtro.includes(c))
         );
       })
     );
@@ -75,6 +75,7 @@ getReportsFromGeoJson(): Promise<AppReport[]> {
     */
 
   postReport(report: AppReport): Observable<AppReport> {
+    console.log('Dati inviati al backend:', report);
     return this.http.post<AppReport>(this.apiUrl, report);
   }
 

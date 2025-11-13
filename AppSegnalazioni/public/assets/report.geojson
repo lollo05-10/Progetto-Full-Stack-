@@ -20,7 +20,7 @@
         "title": "Volpe avvistata",
         "description": "Volpe vista vicino al parco urbano.",
         "category": "Avvistamento di animale selvatico",
-        "image": ""
+        "image": "https://www.loscarpone.cai.it/Sites/435/Media/2025/04/fox-8318961_1920%20(1).png"
       },
       "geometry": {
         "type": "Point",
@@ -33,7 +33,7 @@
         "title": "Gatto smarrito",
         "description": "Gatto bianco con collarino rosso scomparso in via Roma.",
         "category": "Smarrimento",
-        "image": ""
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Ginger_european_cat.jpg/330px-Ginger_european_cat.jpg"
       },
       "geometry": {
         "type": "Point",
@@ -46,7 +46,7 @@
         "title": "Cane ritrovato",
         "description": "Cane trovato al parco Brignole, taglia media.",
         "category": "Ritrovamento",
-        "image": ""
+        "image": "https://www.veterinarimatera.it/wp-content/uploads/2021/03/cane-1.jpg"
       },
       "geometry": {
         "type": "Point",
@@ -59,7 +59,7 @@
         "title": "Nido di rondini",
         "description": "Nido costruito sotto il balcone, con 3 piccoli.",
         "category": "Nido e/o cucciolata avvistato",
-        "image": ""
+        "image": "https://citynews-trentotoday.stgy.ovh/~media/horizontal-hi/49937485703377/rondini-nel-nido-foto-da-pixabay-eismannhans-2.jpg"
       },
       "geometry": {
         "type": "Point",
@@ -72,7 +72,7 @@
         "title": "Riccio nel giardino",
         "description": "Avvistato un riccio ferito in un giardino condominiale.",
         "category": "Avvistamento di animale selvatico",
-        "image": ""
+        "image": "https://www.zooplus.it/magazine/wp-content/uploads/2024/09/aiutare-un-riccio.webp"
       },
       "geometry": {
         "type": "Point",
@@ -85,7 +85,7 @@
         "title": "Segnalazione varia",
         "description": "Altro tipo di segnalazione non categorizzata.",
         "category": "Others",
-        "image": ""
+        "image": "https://www.focusjunior.it/content/uploads/site_stored/imgs/0001/002/3158360-animali-curiosi-scopri-le-razze-piu-piccole-ed-esotiche.jpg"
       },
       "geometry": {
         "type": "Point",

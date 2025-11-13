@@ -1,4 +1,8 @@
 <app-buttons-component></app-buttons-component>
-@for (userReport of userReports; track $index) {
-    <app-report-card [userReport]="userReport"></app-report-card>
-}
+
+<ng-container *ngIf="reportsFiltrati$ | async as reports">
+  <app-report-card
+    *ngFor="let report of reports; trackBy: trackById"
+    [userReport]="report">
+  </app-report-card>
+</ng-container>
