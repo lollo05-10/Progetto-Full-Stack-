@@ -1,0 +1,26 @@
+services:
+  frontend:
+    build: .
+    #image: animal-report-fe
+    container_name: animal-report-frontend
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./backend
+    #image: animal-report-be
+    container_name: animal-report-backend
+    ports:
+      - "27017:27017"
+    volumes:
+      - type: bind
+        source: C:\Users\ITS\Desktop\immagini
+        target: /app/immagini
+      - type: bind
+        source: C:\Users\ITS\Desktop\accademia\appsettings.json
+        target: /app/appsettings.json
+    restart: unless-stopped
+
+    #... postgres...
