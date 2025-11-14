@@ -1,24 +1,54 @@
 <mat-card class="example-card" appearance="outlined">
   <mat-card-header>
-    <div mat-card-avatar class="example-header-image"> </div>
+    <div mat-card-avatar class="example-header-image"></div>
     <div class="title-sub">
       <div class="title-row">
         <mat-card-title>{{userReport()?.title}}</mat-card-title>
         <mat-icon>chevron_right</mat-icon>
         <button mat-button class="category-button">{{userReport()?.categoryNames}}</button>
       </div>
+      
     </div>
   </mat-card-header>
-  
-  <img mat-card-image [src]="reportImage" alt="Immagine del report" />
-
+  <img mat-card-image src="reportImage" alt="Photo of a Shiba Inu">
   <mat-card-content>
     <p>
      {{userReport()?.description}}
     </p>
   </mat-card-content>
   <mat-card-actions>
-  <button class="detail-button" matButton routerLink="/detail/{{userReport()?.id}}">
+    <button class="detail-button" matButton routerLink="/detail/{{userReport()?.id}}">
+      DETAIL
+    </button>
+    <button class="share-button" matButton>
+      <mat-icon>share</mat-icon> 
+    </button>
+  </mat-card-actions>
+</mat-card>
+
+
+<!---
+
+<mat-card class="example-card" appearance="outlined">
+  <mat-card-header>
+    <div mat-card-avatar class="example-header-image"></div>
+    <div class="title-sub">
+      <div class="title-row">
+        <mat-card-title>{{report()?.title}}</mat-card-title>
+        <mat-icon>chevron_right</mat-icon>
+        <button mat-button class="category-button">{{report()?.category}}</button>
+      </div>
+      <mat-card-subtitle>{{report()?.distance}}</mat-card-subtitle>
+    </div>
+  </mat-card-header>
+  <img mat-card-image src="{{report()!.images[0]}}" alt="Photo of a Shiba Inu">
+  <mat-card-content>
+    <p>
+     {{report()?.description}}
+    </p>
+  </mat-card-content>
+  <mat-card-actions>
+  <button class="detail-button" matButton routerLink="/detail/{{report()?.id}}">
     DETAIL
   </button>
       <button class="share-button" matButton>
@@ -27,5 +57,5 @@
   </mat-card-actions>
 </mat-card>
 
-
+-->
 

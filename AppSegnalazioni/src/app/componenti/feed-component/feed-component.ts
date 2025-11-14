@@ -32,7 +32,7 @@ export class FeedComponent implements OnInit {
 
   async ngOnInit() {
     // carica i report dal file GeoJSON
-    await this.dataServ.caricaReportsDaGeoJson();
+    await this.dataServ.caricaReportsDaBackendGeoJson();
   }
 
   trackById(index: number, report: AppReport): number {

@@ -20,7 +20,8 @@ export interface AppReportPost {
   images: ImageDTOPost[];
 }
 export interface ImageDTO {
-  base64: string;
+  base64?: string; // Deprecato, usare path
+  path?: string; // Percorso relativo dell'immagine (es: /images/xxx.jpg)
 }
 export interface ImageDTOPost {
   path: string;

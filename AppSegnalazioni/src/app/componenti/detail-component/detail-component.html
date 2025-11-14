@@ -14,7 +14,7 @@
       @if (report.images.length > 0) {
         <div class="image-gallery">
           @for (image of report.images; track $index) {
-            <img [src]="image" [alt]="report.title" class="detail-image">
+            <img [src]="image.path ? 'https://localhost:7189' + image.path : (image.base64 || './assets/no-image.jpg')" [alt]="report.title" class="detail-image">
           }
         </div>
       }

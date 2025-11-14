@@ -16,7 +16,7 @@ public class ImageEntityTypeConfigurations : IEntityTypeConfiguration<Image>
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Path)
             .IsRequired()
-            .HasMaxLength(250);
+            .HasMaxLength(250); // Percorsi relativi, non base64
 
     }
 }

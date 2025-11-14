@@ -28,8 +28,8 @@
       
       @if (userReports.length > 0) {
         <div class="reports-grid">
-          @for (userReport of userReports; track $index) {
-            <app-report-card [userReport]="userReport"></app-report-card>
+          @for (report of userReports; track $index) {
+            <app-report-card [userReport]="report"></app-report-card>
           }
         </div>
       } @else {

@@ -83,7 +83,13 @@ export class MapComponent {
 
     if (report.images && report.images.length > 0) {
       const image = document.createElement('img');
-      image.src = report.images[0].base64;
+      const firstImage = report.images[0];
+      // Usa path se disponibile, altrimenti base64 (retrocompatibilità)
+      if (firstImage.path) {
+        image.src = `https://localhost:7189${firstImage.path}`;
+      } else {
+        image.src = firstImage.base64 || '';
+      }
       image.width = 50;
       image.height = 50;
       image.style.objectFit = 'cover';

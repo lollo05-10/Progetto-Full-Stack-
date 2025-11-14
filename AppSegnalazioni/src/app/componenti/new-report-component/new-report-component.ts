@@ -17,6 +17,7 @@ import { DataService } from '../../services/dataservice/dataservice';
 import * as L from 'leaflet';
 import { AppReport, AppReportPost } from '../../models/app-report';
 import { CommonModule } from '@angular/common';
+import { forkJoin } from 'rxjs';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -44,7 +45,9 @@ export class NewReportComponent implements AfterViewInit {
   private dataServ = inject(DataService);
 
   public categoryNames: string[] = [];
-  public images: string[] = [];
+  public images: string[] = []; // Per preview (base64)
+  public imageFiles: File[] = []; // File da caricare
+  public uploadedImagePaths: string[] = []; // Percorsi caricati sul server
 
   private map!: L.Map;
   private markersLayer!: L.LayerGroup;
@@ -121,6 +124,9 @@ export class NewReportComponent implements AfterViewInit {
     const element = event.target as HTMLInputElement;
     if (element.files && element.files.length > 0) {
       const file = element.files[0];
+      this.imageFiles.push(file);
+      
+      // Leggi come base64 per preview
       const reader = new FileReader();
       reader.onload = () => {
         this.images.push(reader.result as string);
@@ -135,6 +141,29 @@ export class NewReportComponent implements AfterViewInit {
 
     const formValue = this.reportForm.value;
 
+    // Prima carica tutte le immagini
+    if (this.imageFiles.length > 0) {
+      const uploadObservables = this.imageFiles.map((file) =>
+        this.dataServ.uploadImage(file)
+      );
+
+      forkJoin(uploadObservables).subscribe({
+        next: (results) => {
+          // Estrai i percorsi dalle risposte
+          this.uploadedImagePaths = results.map((r) => r.path);
+          this.createReport(formValue);
+        },
+        error: (err) => {
+          console.error('Errore nel caricamento immagini:', err);
+        },
+      });
+    } else {
+      // Nessuna immagine da caricare, crea direttamente il report
+      this.createReport(formValue);
+    }
+  }
+
+  private createReport(formValue: any) {
     const report: AppReportPost = {
       userId: 1,
       reportDate: new Date().toISOString(),
@@ -144,9 +173,9 @@ export class NewReportComponent implements AfterViewInit {
       longitude: formValue.longitude ?? 0,
       // filtriamo null e forziamo il tipo string[]
       categoryNames: (formValue.categories ?? []).filter(
-        (c): c is string => !!c
+        (c: any): c is string => !!c
       ),
-      images: this.images.map((path) => ({ path })),
+      images: this.uploadedImagePaths.map((path) => ({ path })),
     };
 
     this.dataServ.postReport(report).subscribe({
@@ -154,6 +183,8 @@ export class NewReportComponent implements AfterViewInit {
         console.log('Report salvato con successo');
         this.reportForm.reset();
         this.images = [];
+        this.imageFiles = [];
+        this.uploadedImagePaths = [];
         this.markersLayer.clearLayers();
       },
       error: (err) => console.error('Errore nel post report:', err),
