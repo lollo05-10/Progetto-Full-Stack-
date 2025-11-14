@@ -66,6 +66,9 @@ export class RegisterComponent {
           dob: formData.dob!,
         });
 
+        // Salva l’utente nel localStorage
+        localStorage.setItem('userId', result.id.toString());
+
         console.log('Registrazione completata:', result);
 
         // Reindirizza al login dopo il successo

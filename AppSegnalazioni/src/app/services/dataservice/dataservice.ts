@@ -157,6 +157,10 @@ export class DataService {
       });
   }
 
+  isUserLogged(): boolean {
+    return localStorage.getItem('userId') !== null;
+  }
+
   /** Ottieni utente per id */
   getUserById(userId: number): Promise<User> {
     return fetch(`https://localhost:${this.APIPort}/api/user/${userId}`)

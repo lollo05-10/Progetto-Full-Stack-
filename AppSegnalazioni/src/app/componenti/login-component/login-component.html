@@ -1,1 +1,42 @@
-<p>login-component works!</p>
+<div class="login-container">
+  <mat-card class="login-form">
+    <mat-card-header>
+      <mat-card-title>Accedi al tuo account</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+        <!-- Username -->
+        <mat-form-field appearance="outline">
+          <mat-label>Username</mat-label>
+          <input matInput placeholder="Il tuo username" formControlName="username" />
+          <mat-error 
+          
+          *ngIf="loginForm.get('username')?.hasError('required')">
+            Username obbligatorio
+          </mat-error>
+          <mat-error *ngIf="loginForm.get('username')?.hasError('minlength')">
+            Minimo 3 caratteri
+          </mat-error>
+          <mat-error *ngIf="loginForm.get('username')?.hasError('maxlength')">
+            Massimo 10 caratteri
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Termini e condizioni -->
+        <mat-checkbox formControlName="acceptTerms">
+          Accetto i termini e condizioni
+        </mat-checkbox>
+
+        <!-- Pulsante submit -->
+        <div class="form-actions">
+          <button mat-raised-button color="primary" type="submit" [disabled]="!loginForm.valid || isLoading">
+            {{ isLoading ? "Login..." : "Accedi" }}
+          </button>
+        </div>
+
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

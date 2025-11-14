@@ -100,6 +100,7 @@ export class MapComponent {
     const titleDiv = document.createElement('div');
     titleDiv.className = 'popup-title';
     titleDiv.textContent = report.title;
+    titleDiv.style.fontWeight = 'bold';
     container.appendChild(titleDiv);
 
     const descriptionDiv = document.createElement('div');
