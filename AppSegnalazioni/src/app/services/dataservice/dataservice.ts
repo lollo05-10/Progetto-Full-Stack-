@@ -9,7 +9,7 @@ import { User } from '../../models/user';
   providedIn: 'root',
 })
 export class DataService {
-  private APIPort = 7189; // Modificate la variabile con la vostra porta ❤️ .)
+  private APIPort = 5077; // Modificate la variabile con la vostra porta
   private apiUrl = `https://localhost:${this.APIPort}/api/Report `;
   private reports$ = new BehaviorSubject<AppReport[]>([]);
   reportsFiltrati$!: Observable<AppReport[]>;
@@ -110,6 +110,10 @@ export class DataService {
         console.error('Errore registerUser:', err);
         throw err;
       });
+  }
+
+  isUserLogged(): boolean {
+    return localStorage.getItem('userId') !== null;
   }
 
   /** Ottieni utente per id */

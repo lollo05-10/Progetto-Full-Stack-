@@ -84,8 +84,8 @@ export class MapComponent {
     if (report.images && report.images.length > 0) {
       const image = document.createElement('img');
       image.src = report.images[0].base64;
-      image.width = 50;
-      image.height = 50;
+      image.width = 100;
+      image.height = 100;
       image.style.objectFit = 'cover';
       image.style.marginRight = '8px';
       container.appendChild(image);
@@ -94,6 +94,7 @@ export class MapComponent {
     const titleDiv = document.createElement('div');
     titleDiv.className = 'popup-title';
     titleDiv.textContent = report.title;
+    titleDiv.style.fontWeight = 'bold';
     container.appendChild(titleDiv);
 
     const descriptionDiv = document.createElement('div');
