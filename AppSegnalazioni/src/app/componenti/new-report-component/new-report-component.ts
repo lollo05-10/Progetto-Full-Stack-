@@ -186,30 +186,8 @@ export class NewReportComponent implements AfterViewInit {
         fillOpacity: 0.8,
       });
 
-      marker.bindPopup(this.createPopupContent());
       marker.addTo(this.markersLayer);
     }
   }
 
-  /** Popup dinamico per marker temporaneo */
-  private createPopupContent(): string {
-    const container = document.createElement('div');
-    container.style.display = 'flex';
-
-    if (this.images.length > 0) {
-      const image = document.createElement('img');
-      image.src = this.images[0];
-      image.width = 50;
-      image.height = 50;
-      image.style.objectFit = 'cover';
-      image.style.marginRight = '8px';
-      container.appendChild(image);
-    }
-
-    const textDiv = document.createElement('div');
-    textDiv.innerHTML = `<strong>${this.reportForm.value.title}</strong><br>${this.reportForm.value.description}`;
-    container.appendChild(textDiv);
-
-    return container.outerHTML;
-  }
 }

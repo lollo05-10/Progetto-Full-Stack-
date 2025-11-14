@@ -25,13 +25,15 @@
         </mat-form-field>
 
         <!-- Termini e condizioni -->
-        <mat-checkbox formControlName="acceptTerms">
-          Accetto i termini e condizioni
-        </mat-checkbox>
-
+        <div class="terms-section">
+          <mat-checkbox formControlName="acceptTerms">
+            Accetto i termini e condizioni
+          </mat-checkbox>
+        </div>
+        
         <!-- Pulsante submit -->
-        <div class="form-actions">
-          <button mat-raised-button color="primary" type="submit" [disabled]="!loginForm.valid || isLoading">
+        <div>
+          <button mat-raised-button color="primary" type="submit" class="submit-button" [disabled]="!loginForm.valid || isLoading">
             {{ isLoading ? "Login..." : "Accedi" }}
           </button>
         </div>
