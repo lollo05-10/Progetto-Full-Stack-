@@ -137,7 +137,7 @@ export class DataService {
 
   /** Registrazione utente */
   registerUser(userData: any): Promise<any> {
-    return fetch(`https://localhost:${this.APIPort}/api/User`, {
+    return fetch(`http://localhost:5077/api/User`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -193,4 +193,57 @@ export class DataService {
     const reports = await this.getReportsFromBackendGeoJson();
     this.reports$.next(reports);
   }
+
+
+  // Aggiungi al dataservice.ts
+// dataservice.ts - versione con più controlli
+async getUserByUsername(username: string): Promise<any> {
+  try {
+    console.log(' Cerca utente:', username);
+    
+    const response = await this.http.get<any>(`http://localhost:5077/api/User/filter?username=${encodeURIComponent(username)}`).toPromise();
+    
+    console.log(' Risposta completa API:', response);
+    
+    //  GESTISCI DIVERSI FORMATI DI RISPOSTA
+    if (Array.isArray(response)) {
+      // Caso 1: Restituisce array di utenti
+      if (response.length > 0) {
+        const user = response[0];
+        console.log(' Utente trovato (array):', user);
+        return user;
+      } else {
+        console.log(' Nessun utente trovato (array vuoto)');
+        return null;
+      }
+    } else if (response && typeof response === 'object') {
+      // Caso 2: Restituisce oggetto singolo
+      if (response.id || response.username) {
+        console.log(' Utente trovato (oggetto):', response);
+        return response;
+      } else {
+        console.log(' Risposta non valida (oggetto senza dati utente)');
+        return null;
+      }
+    } else {
+      console.log(' Formato risposta non riconosciuto');
+      return null;
+    }
+    
+  } catch (error: any) {
+    console.error(' Errore ricerca utente:', error);
+    
+    // Gestisci errori HTTP
+    if (error.status === 404) {
+      console.log(' Utente non trovato (404)');
+      return null;
+    }
+    
+    if (error.status === 400) {
+      throw new Error('Richiesta non valida: ' + (error.error?.message || 'Dati errati'));
+    }
+    
+    throw new Error('Errore di connessione: ' + (error.message || 'Unknown error'));
+  }
+}
 }

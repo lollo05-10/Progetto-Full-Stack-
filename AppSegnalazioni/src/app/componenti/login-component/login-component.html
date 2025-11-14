@@ -1,44 +1,45 @@
+<!-- login-component.html -->
 <div class="login-container">
-  <mat-card class="login-form">
+  <mat-card>
     <mat-card-header>
-      <mat-card-title>Accedi al tuo account</mat-card-title>
+      <mat-card-title>Login</mat-card-title>
     </mat-card-header>
 
     <mat-card-content>
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-
-        <!-- Username -->
-        <mat-form-field appearance="outline">
+        
+        <!-- SOLO USERNAME -->
+        <mat-form-field appearance="outline" class="full-width">
           <mat-label>Username</mat-label>
-          <input matInput placeholder="Il tuo username" formControlName="username" />
-          <mat-error 
+          <input matInput formControlName="username" placeholder="Inserisci il tuo username">
           
-          *ngIf="loginForm.get('username')?.hasError('required')">
+          <mat-error *ngIf="username?.hasError('required')">
             Username obbligatorio
           </mat-error>
-          <mat-error *ngIf="loginForm.get('username')?.hasError('minlength')">
-            Minimo 3 caratteri
-          </mat-error>
-          <mat-error *ngIf="loginForm.get('username')?.hasError('maxlength')">
-            Massimo 10 caratteri
+          <mat-error *ngIf="username?.hasError('minlength')">
+            Username troppo corto (min 3 caratteri)
           </mat-error>
         </mat-form-field>
 
-        <!-- Termini e condizioni -->
-        <div class="terms-section">
-          <mat-checkbox formControlName="acceptTerms">
-            Accetto i termini e condizioni
-          </mat-checkbox>
-        </div>
-        
-        <!-- Pulsante submit -->
-        <div>
-          <button mat-raised-button color="primary" type="submit" class="submit-button" [disabled]="!loginForm.valid || isLoading">
-            {{ isLoading ? "Login..." : "Accedi" }}
-          </button>
-        </div>
+        <!--  PULSANTE LOGIN -->
+        <button 
+          mat-raised-button 
+          color="primary" 
+          type="submit" 
+          class="full-width"
+          [disabled]="isLoading || loginForm.invalid">
+          
+          <span *ngIf="!isLoading">Accedi</span>
+          <span *ngIf="isLoading">Accesso in corso...</span>
+        </button>
 
       </form>
+
+      <!--  LINK REGISTRAZIONE -->
+      <div class="register-link">
+        <p>Non hai un account? <a routerLink="/register">Registrati</a></p>
+      </div>
+
     </mat-card-content>
   </mat-card>
 </div>

@@ -1,13 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import {
-  MatCardContent,
-  MatCard,
-  MatCardHeader,
-  MatCardTitle,
-  MatCardSubtitle,
-} from '@angular/material/card';
+import { MatCardContent, MatCard, MatCardHeader, MatCardTitle, MatCardSubtitle } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -31,8 +25,8 @@ import { DataService } from '../../services/dataservice/dataservice';
     MatCard,
     MatCardHeader,
     MatCardTitle,
-    MatCardSubtitle,
-  ],
+    MatCardSubtitle
+],
   templateUrl: './register-component.html',
   styleUrl: './register-component.scss',
 })
@@ -48,37 +42,65 @@ export class RegisterComponent {
       '',
       [Validators.required, Validators.minLength(3), Validators.maxLength(10)],
     ],
-    gender: ['', [Validators.required, Validators.maxLength(1)]],
+    gender: ['M', [Validators.required]], // Valore di default
     dob: ['', Validators.required],
+    isAdmin: [false], // Aggiunto campo isAdmin
     acceptTerms: [false, Validators.requiredTrue],
   });
 
-  async onSubmit() {
-    if (this.registrationForm.valid) {
-      try {
-        this.isLoading = true;
-        const formData = this.registrationForm.value;
+ async onSubmit() {
+  if (this.registrationForm.valid) {
+    try {
+      this.isLoading = true;
+      const formData = this.registrationForm.value;
 
-        // Chiama il servizio per salvare nel DB
-        const result = await this.dataServ.registerUser({
-          username: formData.username!,
-          gender: formData.gender!,
-          dob: formData.dob!,
-        });
-
-        // Salva l’utente nel localStorage
-        localStorage.setItem('userId', result.id.toString());
-
-        console.log('Registrazione completata:', result);
-
-        // Reindirizza al login dopo il successo
-        this.router.navigate(['/login']);
-      } catch (error) {
-        console.error('Errore durante la registrazione:', error);
-        // Qui puoi mostrare un messaggio di errore all'utente
-      } finally {
-        this.isLoading = false;
+      if (!formData.username || !formData.gender || !formData.dob) {
+        throw new Error('Dati del form incompleti');
       }
+
+      const userData = {
+        username: formData.username,
+        gender: formData.gender,
+        dob: formData.dob,
+        isAdmin: formData.isAdmin || false
+      };
+
+      console.log('Invio dati:', userData);
+
+      //  CHIAMA IL SERVICIO E DEBUGGA LA RISPOSTA
+      const result = await this.dataServ.registerUser(userData);
+      
+      console.log('Risposta completa dal server:', result);
+      console.log('Tipo risposta:', typeof result);
+      console.log('Keys risposta:', Object.keys(result || {}));
+
+      //  CONTROLLO PIÙ FLESSIBILE
+      if (result) {
+        // Prova diversi formati di risposta
+        const userId = result.id || result.userId || result.data?.id;
+        
+        if (userId) {
+          localStorage.setItem('userId', userId.toString());
+          localStorage.setItem('username', userData.username);
+          
+          console.log('Registrazione completata. ID:', userId);
+          this.router.navigate(['/login']);
+        } else {
+          // Se non c'è ID ma la chiamata è andata bene
+          console.log('Registrazione OK ma senza ID. Response:', result);
+          this.router.navigate(['/login']);
+        }
+      } else {
+        console.log('Response vuoto ma chiamata OK');
+        this.router.navigate(['/login']);
+      }
+
+    } catch (error) {
+      console.error('Errore durante la registrazione:', error);
+      alert('Errore durante la registrazione: ' + (error as Error).message);
+    } finally {
+      this.isLoading = false;
     }
   }
+}
 }

@@ -1,28 +1,34 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { MatCardModule } from '@angular/material/card';
+import { Router, RouterLink } from '@angular/router';
+import {
+  MatCardContent,
+  MatCard,
+  MatCardHeader,
+  MatCardTitle,
+} from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
-import { DataService } from '../../services/dataservice/dataservice';
 import { CommonModule } from '@angular/common';
+import { DataService } from '../../services/dataservice/dataservice';
 
 @Component({
-  selector: 'app-login-component',
-  standalone: true,
+  selector: 'app-login',
   imports: [
     CommonModule,
-    MatCardModule,
+    ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatCheckboxModule,
     MatButtonModule,
-    ReactiveFormsModule
+    RouterLink,
+    MatCardContent,
+    MatCard,
+    MatCardHeader,
+    MatCardTitle,
   ],
   templateUrl: './login-component.html',
-  styleUrls: ['./login-component.scss'],
+  styleUrl: './login-component.scss',
 })
 export class LoginComponent {
   private fb = inject(FormBuilder);
@@ -31,37 +37,58 @@ export class LoginComponent {
 
   public isLoading = false;
 
+  //  FORM SEMPLIFICATO - SOLO USERNAME
   loginForm = this.fb.group({
-    username: [
-      '',
-      [Validators.required, Validators.minLength(3), Validators.maxLength(10)],
-    ],
-    acceptTerms: [false, Validators.requiredTrue],
+    username: ['', [Validators.required, Validators.minLength(3)]],
   });
 
   async onSubmit() {
     if (this.loginForm.valid) {
       try {
         this.isLoading = true;
-        const formData = this.loginForm.value;
+        const username = this.loginForm.value.username;
 
-        const result = await this.dataServ.registerUser({
-          username: formData.username!,
-        });
+        if (!username) {
+          throw new Error('Username obbligatorio');
+        }
 
-        // Salva userId come stringa nel localStorage
-        localStorage.setItem('userId', result.id.toString());
+        console.log(' Tentativo login per:', username);
 
-        console.log('Login completata:', result);
+        //  CERCA L'UTENTE PER USERNAME
+        const user = await this.dataServ.getUserByUsername(username);
 
-        // Vai al feed dopo login
-        this.router.navigate(['/feed']);
+        if (user) {
+          //  LOGIN SUCCESSO - SALVA NEL LOCALSTORAGE
+          localStorage.setItem('userId', user.id.toString());
+          localStorage.setItem('username', user.username);
+          localStorage.setItem('isAdmin', user.isAdmin ? 'true' : 'false');
+          
+          console.log(' Login completato:', user);
+          this.router.navigate(['/new-report']);
+        } else {
+          throw new Error('Utente non trovato');
+        }
+
       } catch (error) {
-        console.error('Errore durante il login:', error);
-        alert('Errore durante il login. Riprova.');
+        console.error(' Errore durante il login:', error);
+        alert('Errore durante il login: ' + (error as Error).message);
       } finally {
         this.isLoading = false;
       }
+    } else {
+      //  SE IL FORM NON È VALIDO
+      this.markFormGroupTouched();
     }
   }
+
+  //  METODO PER MARCARE TUTTI I CAMPI COME TOCCATI
+  private markFormGroupTouched() {
+    Object.keys(this.loginForm.controls).forEach(key => {
+      const control = this.loginForm.get(key);
+      control?.markAsTouched();
+    });
+  }
+
+  //  GETTER PER FACILE ACCESSO AI CONTROLLI
+  get username() { return this.loginForm.get('username'); }
 }
