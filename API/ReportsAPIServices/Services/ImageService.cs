@@ -44,18 +44,22 @@ public class ImageService : IImageService
         }
     }
 
-    public async Task<List<ImageViewModel>> GetAllImages()
+    public async Task<List<ImageViewModel>> GetAllReportImages(int reportId)
     {
         var img_list = await _context.Image.ToListAsync();
-        var imgViewModel = img_list.Select(i => new ImageViewModel
-        {
-            Id = i.Id,
-            Path = i.Path,
-            ReportId = i.ReportId,
-            Report = i.Report,
-        }).ToList();
+        var imgViewModel = img_list
+            .Where(x => x.ReportId == reportId)
+            .Select(i => new ImageViewModel
+            {
+                Id = i.Id,
+                Path = i.Path,
+                ReportId = i.ReportId,
+                Report = i.Report,
+            })
+            .ToList();
         return imgViewModel;
     }
+
 
     public async Task<string> UploadFileImages(IFormFile file, int reportId)
     {

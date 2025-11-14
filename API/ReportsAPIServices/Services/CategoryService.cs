@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ReportsAPIServices.Entities;
 using ReportsAPIServices.Models.DTOs;
+using ReportsAPIServices.Models.DTOs.UpdateDTO;
 using ReportsAPIServices.Models.View_Models;
 using ReportsAPIServices.Services.Services_Interfaces;
 using System;
@@ -22,18 +23,7 @@ public class CategoryService : ICategoryService
         _context = context;
     }
 
-    public async Task<string> GetNameAsync()
-    {
-        var a = await _context.Category.SingleAsync(x => x.Id == 1);
 
-        return a.Name;
-    }
-
-    public async Task<string> GetDescriptionAsync()
-    {
-        var a = await _context.Category.SingleAsync(x => x.Id == 2);
-        return a.Description;
-    }
 
     public async Task<List<CategoryViewModel>> GetAllCategoriesAsync()
     {
@@ -77,34 +67,47 @@ public class CategoryService : ICategoryService
         return category.Id;
     }
 
-    public async Task DeleteByIdAsync(int id)
+    public async Task<int> DeleteByIdAsync(int id)
     {
         var category = await _context.Category.FindAsync(id);
-        if (category != null)
-        {
-            _context.Category.Remove(category);
-            await _context.SaveChangesAsync();
-
-        }
-
-    }
-
-    public async Task UpdateAsync(CategoryDTO dto)
-    {
-        var category = new Category
-        {
-            Name = dto.Name,
-            Description = dto.Description
-        };
-        _context.Update(category);
+        if (category == null)
+            return -1;
+        _context.Category.Remove(category);
         await _context.SaveChangesAsync();
+        return category.Id;
     }
 
+    public async Task<int> UpdateAsync(UpdateCategoryDTO updateEntity, int id)
+    {
+        Category? entity = await _context.Category.FindAsync(id);
+        if (entity == null)
+            return -1;
+        if (!string.IsNullOrEmpty(updateEntity.Name))
+        {
+            entity.Name = updateEntity.Name;
+        }
+        if (!string.IsNullOrEmpty(updateEntity.Description))
+        {
+            entity.Description = updateEntity.Description;
+        }
+        _context.Category.Update(entity);
+        await _context.SaveChangesAsync();
+        return entity.Id;
+    }
 
+    public async Task<string> GetNameAsync(int id)
+    {
+        var entity = await _context.Category.FindAsync(id);
+        if (entity == null)
+            return "-1";
+        return entity.Name;
+    }
 
-
-
-
-
-
+    public async Task<string> GetDescriptionAsync(int id)
+    {
+        var entity = await _context.Category.FindAsync(id);
+        if (entity == null)
+            return "-1";
+        return entity.Description;
+    }
 }

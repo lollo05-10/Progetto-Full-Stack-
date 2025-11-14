@@ -13,6 +13,6 @@ namespace ReportsAPIServices.Services.Services_Interfaces;
 public interface IImageService
 {
     Task<string> UploadFileImages(IFormFile file, int reportId);
-    Task<List<ImageViewModel>> GetAllImages();
+    Task<List<ImageViewModel>> GetAllReportImages(int reportId);
     Task<int> DeleteImage(int id);
 }
