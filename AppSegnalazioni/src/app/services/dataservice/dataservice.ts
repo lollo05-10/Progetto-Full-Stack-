@@ -9,8 +9,8 @@ import { User } from '../../models/user';
   providedIn: 'root',
 })
 export class DataService {
-  private APIPort = 5077; // Modificate la variabile con la vostra porta
-  private apiUrl = `https://localhost:${this.APIPort}/api/Report `;
+  private APIPort = 7189; // Modificate la variabile con la vostra porta ❤️ .)
+  private apiUrl = `https://localhost:${this.APIPort}/api/report`;
   private reports$ = new BehaviorSubject<AppReport[]>([]);
   reportsFiltrati$!: Observable<AppReport[]>;
 
@@ -29,7 +29,7 @@ export class DataService {
     );
   }
 
-  /** Carica i report da GeoJSON e li converte in AppReport */
+  /** Carica i report da GeoJSON locale (file statico) e li converte in AppReport */
   getReportsFromGeoJson(): Promise<AppReport[]> {
     return fetch('./assets/report.geojson')
       .then((resp) => resp.json())
@@ -59,6 +59,41 @@ export class DataService {
       });
   }
 
+  /** Ottieni GeoJSON dal backend */
+  getGeoJsonFromBackend(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/geojson`);
+  }
+
+  /** Ottieni GeoJSON dal backend e convertilo in AppReport[] */
+  getReportsFromBackendGeoJson(): Promise<AppReport[]> {
+    return fetch(`${this.apiUrl}/geojson`)
+      .then((resp) => resp.json())
+      .then((geojson: any) => {
+        return geojson.features.map(
+          (f: any, index: number) =>
+            ({
+              id: index + 1,
+              title: f.properties.title ?? '',
+              description: f.properties.description ?? '',
+              userId: f.properties.userId ?? 0,
+              reportDate: f.properties.date ?? new Date().toISOString(),
+              categoryNames: f.properties.category
+                ? [f.properties.category]
+                : ['Others'],
+              images: f.properties.image
+                ? [{ base64: f.properties.image }]
+                : ([] as ImageDTO[]),
+              latitude: f.geometry?.coordinates?.[1] ?? 0,
+              longitude: f.geometry?.coordinates?.[0] ?? 0,
+            } as AppReport)
+        );
+      })
+      .catch((err) => {
+        console.error('Errore caricamento GeoJSON dal backend:', err);
+        return [];
+      });
+  }
+
   /** Ottieni tutti i report dal backend */
   getReports(): Observable<AppReport[]> {
     return this.http.get<AppReport[]>(this.apiUrl);
@@ -82,6 +117,16 @@ export class DataService {
         console.error('Errore getCategories:', err);
         return [];
       });
+  }
+
+  /** Carica un'immagine sul backend e restituisce il percorso */
+  uploadImage(file: File): Observable<{ path: string }> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<{ path: string }>(
+      `https://localhost:${this.APIPort}/api/image/upload`,
+      formData
+    );
   }
 
   /** Salva un report sul backend */
@@ -118,7 +163,7 @@ export class DataService {
 
   /** Ottieni utente per id */
   getUserById(userId: number): Promise<User> {
-    return fetch(`http://localhost:${this.APIPort}/api/user/${userId}`)
+    return fetch(`https://localhost:${this.APIPort}/api/user/${userId}`)
       .then((resp) => resp.json())
       .catch((err) => {
         console.error('Errore getUserById:', err);
@@ -128,7 +173,7 @@ export class DataService {
 
   /** Ottieni report di un utente */
   getUserReports(userId: number): Promise<AppReport[]> {
-    return fetch(`http://localhost:${this.APIPort}/api/user/${userId}/reports`)
+    return fetch(`https://localhost:${this.APIPort}/api/user/${userId}/Report`)
       .then((resp) => resp.json())
       .then((reports: AppReport[]) => reports)
       .catch((err) => {
@@ -137,9 +182,15 @@ export class DataService {
       });
   }
 
-  /** Carica i report da GeoJSON e aggiorna il BehaviorSubject */
+  /** Carica i report da GeoJSON locale e aggiorna il BehaviorSubject */
   async caricaReportsDaGeoJson() {
     const reports = await this.getReportsFromGeoJson();
+    this.reports$.next(reports);
+  }
+
+  /** Carica i report da GeoJSON del backend e aggiorna il BehaviorSubject */
+  async caricaReportsDaBackendGeoJson() {
+    const reports = await this.getReportsFromBackendGeoJson();
     this.reports$.next(reports);
   }
 }

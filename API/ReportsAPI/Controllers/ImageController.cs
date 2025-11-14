@@ -26,6 +26,24 @@ public class ImageController : ControllerBase
             return BadRequest("La directory non esiste");
         return Created("Immagine aggiunta: ", result);
     }
+
+    [HttpPost("upload")]
+    public async Task<IActionResult> UploadTemporaryImage(IFormFile file)
+    {
+        if (file == null)
+            return BadRequest("File non fornito");
+
+        string result = await _service.UploadTemporaryImage(file);
+        if (result.StartsWith("-"))
+        {
+            if (result == "-1")
+                return BadRequest("File vuoto");
+            if (result == "-3")
+                return BadRequest("Path del file non configurato!");
+            return BadRequest($"Errore durante l'upload: {result}");
+        }
+        return Ok(new { path = result });
+    }
     [HttpGet("report/{reportId}/images")]
     public async Task<IActionResult> GetAllReportImages([FromRoute] int reportId)
     {

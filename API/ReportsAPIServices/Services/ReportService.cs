@@ -172,10 +172,12 @@ public class ReportService : IReportService
         using var transaction = await _context.Database.BeginTransactionAsync();
         try
         {
+
+
             var report = new Report
             {
                 UserID = dto.UserId,
-                ReportDate = (DateTime)(dto.ReportDate == default ? DateTime.UtcNow : dto.ReportDate),
+                ReportDate = dto.ReportDate ?? DateTime.UtcNow,
                 Title = dto.Title,
                 Description = dto.Description,
                 Latitude = dto.Latitude,
